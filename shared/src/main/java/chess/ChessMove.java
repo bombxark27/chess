@@ -19,6 +19,12 @@ public class ChessMove {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
+    public String toString() {
+
+        return "";
+    }
+
     /**
      * @return ChessPosition of ending location
      */
