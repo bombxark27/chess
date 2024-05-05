@@ -36,6 +36,15 @@ public class ChessBoard {
         return squares[position.getRow()][position.getColumn()];
     }
 
+    public boolean onBoard(ChessPosition position) {
+        if (position.getRow() >= 1 && position.getRow() <= 8) {
+            if (position.getColumn() >= 1 && position.getColumn() <= 8) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Sets the board to the default starting board
      * (How the game of chess normally starts)
