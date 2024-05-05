@@ -40,6 +40,9 @@ class BishopMovesCalculator implements PieceMovesCalculator {
                 possibleMoves.add(move);
                 break;
             }
+            else if (board.getPiece(myPosition).getTeamColor() == board.getPiece(tempPosition).getTeamColor()) {
+                break;
+            }
         }
         tempPosition = new ChessPosition(currentRow, currentCol);
         while (board.onBoard(tempPosition)) {
@@ -51,6 +54,9 @@ class BishopMovesCalculator implements PieceMovesCalculator {
             else if (board.getPiece(myPosition).getTeamColor() != board.getPiece(tempPosition).getTeamColor()) {
                 ChessMove move = new ChessMove(myPosition,tempPosition,null);
                 possibleMoves.add(move);
+                break;
+            }
+            else if (board.getPiece(myPosition).getTeamColor() == board.getPiece(tempPosition).getTeamColor()) {
                 break;
             }
         }
@@ -66,6 +72,9 @@ class BishopMovesCalculator implements PieceMovesCalculator {
                 possibleMoves.add(move);
                 break;
             }
+            else if (board.getPiece(myPosition).getTeamColor() == board.getPiece(tempPosition).getTeamColor()) {
+                break;
+            }
         }
         tempPosition = new ChessPosition(currentRow,currentCol);
         while (board.onBoard(tempPosition)) {
@@ -77,6 +86,9 @@ class BishopMovesCalculator implements PieceMovesCalculator {
             else if (board.getPiece(myPosition).getTeamColor() != board.getPiece(tempPosition).getTeamColor()) {
                 ChessMove move = new ChessMove(myPosition,tempPosition,null);
                 possibleMoves.add(move);
+                break;
+            }
+            else if (board.getPiece(myPosition).getTeamColor() == board.getPiece(tempPosition).getTeamColor()) {
                 break;
             }
         }
