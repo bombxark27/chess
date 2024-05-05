@@ -26,8 +26,62 @@ class BishopMovesCalculator implements PieceMovesCalculator {
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         ArrayList<ChessMove> possibleMoves = new ArrayList<ChessMove>();
+        int currentRow = myPosition.getRow();
+        int currentCol = myPosition.getColumn();
+        ChessPosition tempPosition = new ChessPosition(currentRow,currentCol);
+        while (board.onBoard(tempPosition)) {
+            tempPosition = new ChessPosition(tempPosition.getRow()+1, tempPosition.getColumn()+1);
+            if (board.getPiece(tempPosition) == null) {
+                ChessMove move = new ChessMove(myPosition,tempPosition,null);
+                possibleMoves.add(move);
+            }
+            else if (board.getPiece(myPosition).getTeamColor() != board.getPiece(tempPosition).getTeamColor()) {
+                ChessMove move = new ChessMove(myPosition,tempPosition,null);
+                possibleMoves.add(move);
+                break;
+            }
+        }
+        tempPosition = new ChessPosition(currentRow, currentCol);
+        while (board.onBoard(tempPosition)) {
+            tempPosition = new ChessPosition(tempPosition.getRow()-1, tempPosition.getColumn()-1);
+            if (board.getPiece(tempPosition) == null) {
+                ChessMove move = new ChessMove(myPosition,tempPosition,null);
+                possibleMoves.add(move);
+            }
+            else if (board.getPiece(myPosition).getTeamColor() != board.getPiece(tempPosition).getTeamColor()) {
+                ChessMove move = new ChessMove(myPosition,tempPosition,null);
+                possibleMoves.add(move);
+                break;
+            }
+        }
+        tempPosition = new ChessPosition(currentRow,currentCol);
+        while (board.onBoard(tempPosition)) {
+            tempPosition = new ChessPosition(tempPosition.getRow()+1, tempPosition.getColumn()-1);
+            if (board.getPiece(tempPosition) == null) {
+                ChessMove move = new ChessMove(myPosition,tempPosition,null);
+                possibleMoves.add(move);
+            }
+            else if (board.getPiece(myPosition).getTeamColor() != board.getPiece(tempPosition).getTeamColor()) {
+                ChessMove move = new ChessMove(myPosition,tempPosition,null);
+                possibleMoves.add(move);
+                break;
+            }
+        }
+        tempPosition = new ChessPosition(currentRow,currentCol);
+        while (board.onBoard(tempPosition)) {
+            tempPosition = new ChessPosition(tempPosition.getRow()-1, tempPosition.getColumn()+1);
+            if (board.getPiece(tempPosition) == null) {
+                ChessMove move = new ChessMove(myPosition,tempPosition,null);
+                possibleMoves.add(move);
+            }
+            else if (board.getPiece(myPosition).getTeamColor() != board.getPiece(tempPosition).getTeamColor()) {
+                ChessMove move = new ChessMove(myPosition,tempPosition,null);
+                possibleMoves.add(move);
+                break;
+            }
+        }
 
-        return List.of();
+        return possibleMoves;
     }
 }
 
