@@ -196,10 +196,10 @@ class QueenMovesCalculator implements PieceMovesCalculator {
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         ArrayList<ChessMove> possibleMoves = new ArrayList<ChessMove>();
-        int currentRow = myPosition.getRow();
-        int currentCol = myPosition.getColumn();
-        ChessPosition tempPosition;
-
+        Collection<ChessMove> movesLikeBishop = new BishopMovesCalculator().pieceMoves(board,myPosition);
+        Collection<ChessMove> movesLikeRook = new RookMovesCalculator().pieceMoves(board,myPosition);
+        possibleMoves.addAll(movesLikeBishop);
+        possibleMoves.addAll(movesLikeRook);
         return possibleMoves;
     }
 }
