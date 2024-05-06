@@ -21,7 +21,38 @@ class KnightMovesCalculator implements PieceMovesCalculator {
         ArrayList<ChessMove> possibleMoves = new ArrayList<ChessMove>();
         int currentRow = myPosition.getRow();
         int currentCol = myPosition.getColumn();
-        ChessPosition tempPosition = new ChessPosition(currentRow,currentCol);
+        ChessPosition tempPosition;
+        //up 2 Rows
+        for (int i = -1; i < 2; i+=2){
+            tempPosition = new ChessPosition(currentRow+2,currentCol+i);
+            if(board.onBoard(tempPosition)){
+                if((board.getPiece(tempPosition) == null)||(board.getPiece(tempPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor())){
+                    ChessMove move = new ChessMove(myPosition,tempPosition,null);
+                    possibleMoves.add(move);
+                }
+            }
+            tempPosition = new ChessPosition(currentRow-2,currentCol+i);
+            if(board.onBoard(tempPosition)){
+                if((board.getPiece(tempPosition) == null)||(board.getPiece(tempPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor())){
+                    ChessMove move = new ChessMove(myPosition,tempPosition,null);
+                    possibleMoves.add(move);
+                }
+            }
+            tempPosition = new ChessPosition(currentRow+i,currentCol+2);
+            if(board.onBoard(tempPosition)){
+                if((board.getPiece(tempPosition) == null)||(board.getPiece(tempPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor())){
+                    ChessMove move = new ChessMove(myPosition,tempPosition,null);
+                    possibleMoves.add(move);
+                }
+            }
+            tempPosition = new ChessPosition(currentRow+i,currentCol-2);
+            if(board.onBoard(tempPosition)){
+                if((board.getPiece(tempPosition) == null)||(board.getPiece(tempPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor())){
+                    ChessMove move = new ChessMove(myPosition,tempPosition,null);
+                    possibleMoves.add(move);
+                }
+            }
+        }
 
         return possibleMoves;
     }
