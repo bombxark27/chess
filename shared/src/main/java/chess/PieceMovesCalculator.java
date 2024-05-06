@@ -18,7 +18,12 @@ class PawnMovesCalculator implements PieceMovesCalculator {
 class KnightMovesCalculator implements PieceMovesCalculator {
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        return List.of();
+        ArrayList<ChessMove> possibleMoves = new ArrayList<ChessMove>();
+        int currentRow = myPosition.getRow();
+        int currentCol = myPosition.getColumn();
+        ChessPosition tempPosition = new ChessPosition(currentRow,currentCol);
+
+        return possibleMoves;
     }
 }
 

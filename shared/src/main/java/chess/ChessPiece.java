@@ -73,6 +73,10 @@ public class ChessPiece {
             KingMovesCalculator myKing = new KingMovesCalculator();
             return myKing.pieceMoves(board,myPosition);
         }
+        else if (type == PieceType.KNIGHT){
+            KnightMovesCalculator myKnight = new KnightMovesCalculator();
+            return myKnight.pieceMoves(board,myPosition);
+        }
         return new ArrayList<ChessMove>();
     }
 }
