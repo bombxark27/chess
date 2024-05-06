@@ -81,6 +81,14 @@ public class ChessPiece {
             PawnMovesCalculator myPawn = new PawnMovesCalculator();
             return myPawn.pieceMoves(board,myPosition);
         }
+        else if (type == PieceType.QUEEN){
+            QueenMovesCalculator myQueen = new QueenMovesCalculator();
+            return myQueen.pieceMoves(board,myPosition);
+        }
+        else if (type == PieceType.ROOK){
+            RookMovesCalculator myRook = new RookMovesCalculator();
+            return myRook.pieceMoves(board,myPosition);
+        }
         return new ArrayList<ChessMove>();
     }
 }
