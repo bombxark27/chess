@@ -67,6 +67,9 @@ class BishopMovesCalculator implements PieceMovesCalculator {
         ChessPosition tempPosition = new ChessPosition(currentRow,currentCol);
         while (board.onBoard(tempPosition)) {
             tempPosition = new ChessPosition(tempPosition.getRow()+1, tempPosition.getColumn()+1);
+            if(!board.onBoard(tempPosition)){
+                break;
+            }
             if (board.getPiece(tempPosition) == null) {
                 ChessMove move = new ChessMove(myPosition,tempPosition,null);
                 possibleMoves.add(move);
@@ -83,6 +86,9 @@ class BishopMovesCalculator implements PieceMovesCalculator {
         tempPosition = new ChessPosition(currentRow, currentCol);
         while (board.onBoard(tempPosition)) {
             tempPosition = new ChessPosition(tempPosition.getRow()-1, tempPosition.getColumn()-1);
+            if(!board.onBoard(tempPosition)){
+                break;
+            }
             if (board.getPiece(tempPosition) == null) {
                 ChessMove move = new ChessMove(myPosition,tempPosition,null);
                 possibleMoves.add(move);
@@ -99,6 +105,9 @@ class BishopMovesCalculator implements PieceMovesCalculator {
         tempPosition = new ChessPosition(currentRow,currentCol);
         while (board.onBoard(tempPosition)) {
             tempPosition = new ChessPosition(tempPosition.getRow()+1, tempPosition.getColumn()-1);
+            if(!board.onBoard(tempPosition)){
+                break;
+            }
             if (board.getPiece(tempPosition) == null) {
                 ChessMove move = new ChessMove(myPosition,tempPosition,null);
                 possibleMoves.add(move);
@@ -115,6 +124,9 @@ class BishopMovesCalculator implements PieceMovesCalculator {
         tempPosition = new ChessPosition(currentRow,currentCol);
         while (board.onBoard(tempPosition)) {
             tempPosition = new ChessPosition(tempPosition.getRow()-1, tempPosition.getColumn()+1);
+            if(!board.onBoard(tempPosition)){
+                break;
+            }
             if (board.getPiece(tempPosition) == null) {
                 ChessMove move = new ChessMove(myPosition,tempPosition,null);
                 possibleMoves.add(move);
