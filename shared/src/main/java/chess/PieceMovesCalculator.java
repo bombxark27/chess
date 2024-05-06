@@ -11,7 +11,28 @@ public interface PieceMovesCalculator {
 class PawnMovesCalculator implements PieceMovesCalculator {
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        return List.of();
+        ArrayList<ChessMove> possibleMoves = new ArrayList<ChessMove>();
+        int currentRow = myPosition.getRow();
+        int currentCol = myPosition.getColumn();
+        ChessPosition tempPosition;
+        ChessPosition initialTempPosition;
+        if(board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.WHITE){
+            if(currentRow == 2){
+                tempPosition = new ChessPosition(currentRow+1,currentCol);
+                if(board.getPiece(tempPosition) == null){
+                    ChessMove move = new ChessMove(myPosition,tempPosition,null);
+                    possibleMoves.add(move);
+                }
+                initialTempPosition = new ChessPosition(currentRow+2,currentCol);
+                if( (board.getPiece(initialTempPosition) == null) && (board.getPiece(tempPosition) == null) ){
+                    ChessMove move = new ChessMove(myPosition,tempPosition,null);
+                    possibleMoves.add(move);
+                }
+            }
+
+
+        }
+        return possibleMoves;
     }
 }
 
