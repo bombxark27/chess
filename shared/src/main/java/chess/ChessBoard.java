@@ -22,6 +22,7 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
+        // -1 on the index to prevent squares[8][8] should access by squares[7][7]
         squares[position.getRow()-1][position.getColumn()-1] = piece;
     }
 
@@ -33,6 +34,7 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
+        // -1 on the index to prevent squares[8][8] should access by squares[7][7]
         return squares[position.getRow()-1][position.getColumn()-1];
     }
 
