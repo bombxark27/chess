@@ -39,8 +39,8 @@ public class ChessBoard {
     }
 
     public boolean onBoard(ChessPosition position) {
-        if (position.getRow() > 1 && position.getRow() < 8) {
-            if (position.getColumn() > 1 && position.getColumn() < 8) {
+        if (position.getRow() > 0 && position.getRow() < 8) {
+            if (position.getColumn() > 0 && position.getColumn() < 8) {
                 return true;
             }
         }
