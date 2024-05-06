@@ -35,12 +35,13 @@ public class ChessBoard {
      */
     public ChessPiece getPiece(ChessPosition position) {
         // -1 on the index to prevent squares[8][8] should access by squares[7][7]
+        //squares[9][8] causes an error
         return squares[position.getRow()-1][position.getColumn()-1];
     }
 
     public boolean onBoard(ChessPosition position) {
-        if (position.getRow() > 0 && position.getRow() < 8) {
-            if (position.getColumn() > 0 && position.getColumn() < 8) {
+        if (position.getRow() > 0 && position.getRow() <= 8) {
+            if (position.getColumn() > 0 && position.getColumn() <= 8) {
                 return true;
             }
         }
