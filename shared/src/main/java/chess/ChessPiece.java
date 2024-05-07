@@ -44,18 +44,6 @@ public class ChessPiece {
         return type;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ChessPiece that = (ChessPiece) o;
-        return type == that.type && teamColor == that.teamColor;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(type, teamColor);
-    }
 
     /**
      * Calculates all the positions a chess piece can move to
@@ -90,5 +78,18 @@ public class ChessPiece {
             return myRook.pieceMoves(board,myPosition);
         }
         return new ArrayList<ChessMove>();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessPiece that = (ChessPiece) o;
+        return type == that.type && teamColor == that.teamColor;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, teamColor);
     }
 }
