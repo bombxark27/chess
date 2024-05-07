@@ -23,14 +23,37 @@ class PawnMovesCalculator implements PieceMovesCalculator {
                     continue;
                 }
                 if( (board.getPiece(tempPosition) != null) && (board.getPiece(tempPosition).getTeamColor() != ChessGame.TeamColor.WHITE) ){
+                    if (tempPosition.getRow() == 8){
+                        ChessMove move = new ChessMove(myPosition,tempPosition, ChessPiece.PieceType.QUEEN);
+                        possibleMoves.add(move);
+                        move = new ChessMove(myPosition, tempPosition, ChessPiece.PieceType.ROOK);
+                        possibleMoves.add(move);
+                        move = new ChessMove(myPosition,tempPosition, ChessPiece.PieceType.KNIGHT);
+                        possibleMoves.add(move);
+                        move = new ChessMove(myPosition,tempPosition, ChessPiece.PieceType.BISHOP);
+                        possibleMoves.add(move);
+                        break;
+                    }
                     ChessMove move = new ChessMove(myPosition,tempPosition,null);
                     possibleMoves.add(move);
                 }
             }
             tempPosition = new ChessPosition(currentRow+1,currentCol);
             if(board.getPiece(tempPosition) == null){
-                ChessMove move = new ChessMove(myPosition,tempPosition,null);
-                possibleMoves.add(move);
+                if (tempPosition.getRow() == 8){
+                    ChessMove move = new ChessMove(myPosition,tempPosition, ChessPiece.PieceType.QUEEN);
+                    possibleMoves.add(move);
+                    move = new ChessMove(myPosition, tempPosition, ChessPiece.PieceType.ROOK);
+                    possibleMoves.add(move);
+                    move = new ChessMove(myPosition,tempPosition, ChessPiece.PieceType.KNIGHT);
+                    possibleMoves.add(move);
+                    move = new ChessMove(myPosition,tempPosition, ChessPiece.PieceType.BISHOP);
+                    possibleMoves.add(move);
+                }
+                else {
+                    ChessMove move = new ChessMove(myPosition, tempPosition, null);
+                    possibleMoves.add(move);
+                }
             }
             if(currentRow == 2){
                 initialTempPosition = new ChessPosition(currentRow+2,currentCol);
@@ -47,14 +70,37 @@ class PawnMovesCalculator implements PieceMovesCalculator {
                     continue;
                 }
                 if( (board.getPiece(tempPosition) != null) && (board.getPiece(tempPosition).getTeamColor() != ChessGame.TeamColor.BLACK) ){
+                    if (tempPosition.getRow() == 1){
+                        ChessMove move = new ChessMove(myPosition,tempPosition, ChessPiece.PieceType.QUEEN);
+                        possibleMoves.add(move);
+                        move = new ChessMove(myPosition, tempPosition, ChessPiece.PieceType.ROOK);
+                        possibleMoves.add(move);
+                        move = new ChessMove(myPosition,tempPosition, ChessPiece.PieceType.KNIGHT);
+                        possibleMoves.add(move);
+                        move = new ChessMove(myPosition,tempPosition, ChessPiece.PieceType.BISHOP);
+                        possibleMoves.add(move);
+                        break;
+                    }
                     ChessMove move = new ChessMove(myPosition,tempPosition,null);
                     possibleMoves.add(move);
                 }
             }
             tempPosition = new ChessPosition(currentRow-1,currentCol);
             if(board.getPiece(tempPosition) == null){
-                ChessMove move = new ChessMove(myPosition,tempPosition,null);
-                possibleMoves.add(move);
+                if (tempPosition.getRow() == 1){
+                    ChessMove move = new ChessMove(myPosition,tempPosition, ChessPiece.PieceType.QUEEN);
+                    possibleMoves.add(move);
+                    move = new ChessMove(myPosition, tempPosition, ChessPiece.PieceType.ROOK);
+                    possibleMoves.add(move);
+                    move = new ChessMove(myPosition,tempPosition, ChessPiece.PieceType.KNIGHT);
+                    possibleMoves.add(move);
+                    move = new ChessMove(myPosition,tempPosition, ChessPiece.PieceType.BISHOP);
+                    possibleMoves.add(move);
+                }
+                else {
+                    ChessMove move = new ChessMove(myPosition, tempPosition, null);
+                    possibleMoves.add(move);
+                }
             }
             if(currentRow == 7){
                 initialTempPosition = new ChessPosition(currentRow-2,currentCol);
