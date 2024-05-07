@@ -19,6 +19,9 @@ class PawnMovesCalculator implements PieceMovesCalculator {
         if(board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.WHITE){
             for(int i = -1; i <= 1; i+=2){
                 tempPosition = new ChessPosition(currentRow+1, currentCol+i);
+                if ( (currentCol+i == 0) || (currentCol+i == 9)){
+                    continue;
+                }
                 if( (board.getPiece(tempPosition) != null) && (board.getPiece(tempPosition).getTeamColor() != ChessGame.TeamColor.WHITE) ){
                     ChessMove move = new ChessMove(myPosition,tempPosition,null);
                     possibleMoves.add(move);
@@ -40,6 +43,9 @@ class PawnMovesCalculator implements PieceMovesCalculator {
         else if(board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.BLACK){
             for(int i = -1; i <= 1; i+=2){
                 tempPosition = new ChessPosition(currentRow-1, currentCol+i);
+                if ( (currentCol+i == 0) || (currentCol+i == 9)){
+                    continue;
+                }
                 if( (board.getPiece(tempPosition) != null) && (board.getPiece(tempPosition).getTeamColor() != ChessGame.TeamColor.BLACK) ){
                     ChessMove move = new ChessMove(myPosition,tempPosition,null);
                     possibleMoves.add(move);
