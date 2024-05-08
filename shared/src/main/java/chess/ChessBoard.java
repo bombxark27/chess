@@ -75,6 +75,7 @@ public class ChessBoard {
                 tempPosition = new ChessPosition(8,i+7);
                 addPiece(tempPosition,new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK));
             }
+            //knight
             else if(i == 2){
                 tempPosition = new ChessPosition(1,i);
                 addPiece(tempPosition,new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT));
@@ -85,6 +86,7 @@ public class ChessBoard {
                 tempPosition = new ChessPosition(8,i+5);
                 addPiece(tempPosition,new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT));
             }
+            //bishop
             else if(i == 3){
                 tempPosition = new ChessPosition(1,i);
                 addPiece(tempPosition,new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.BISHOP));
@@ -95,6 +97,7 @@ public class ChessBoard {
                 tempPosition = new ChessPosition(8,i+3);
                 addPiece(tempPosition,new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP));
             }
+            //king and queen
             else if(i == 4){
                 tempPosition = new ChessPosition(1,i);
                 addPiece(tempPosition,aQueenWhite);
@@ -137,7 +140,7 @@ public class ChessBoard {
                     builder.append("|");
                 }
             }
-//            builder.append("\n");
+            builder.append("\n");
         }
         return builder.toString();
     }

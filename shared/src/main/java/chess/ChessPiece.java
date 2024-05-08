@@ -45,6 +45,18 @@ public class ChessPiece {
     }
 
 
+    public String getPieceName() {
+        switch (type) {
+            case KING: return "K";
+            case QUEEN: return "Q";
+            case BISHOP: return "B";
+            case KNIGHT: return "N";
+            case ROOK: return "R";
+            case PAWN: return "P";
+        }
+        return "";
+    }
+
     /**
      * Calculates all the positions a chess piece can move to
      * Does not take into account moves that are illegal due to leaving the king in
@@ -95,46 +107,9 @@ public class ChessPiece {
 
     @Override
     public String toString() {
-        if (this.getTeamColor() == ChessGame.TeamColor.WHITE) {
-            if (this.getPieceType() == PieceType.PAWN) {
-                return "P";
-            }
-            else if (this.getPieceType() == PieceType.ROOK){
-                return "R";
-            }
-            else if (this.getPieceType() == PieceType.KNIGHT){
-                return "N";
-            }
-            else if (this.getPieceType() == PieceType.BISHOP){
-                return "B";
-            }
-            else if (this.getPieceType() == PieceType.QUEEN){
-                return "Q";
-            }
-            else if (this.getPieceType() == PieceType.KING){
-                return "K";
-            }
+        if (this.getTeamColor() == ChessGame.TeamColor.BLACK) {
+            return getPieceName().toLowerCase();
         }
-        else if (this.getTeamColor() == ChessGame.TeamColor.BLACK) {
-            if (this.getPieceType() == PieceType.PAWN) {
-                return "p";
-            }
-            else if (this.getPieceType() == PieceType.ROOK){
-                return "r";
-            }
-            else if (this.getPieceType() == PieceType.KNIGHT){
-                return "n";
-            }
-            else if (this.getPieceType() == PieceType.BISHOP){
-                return "b";
-            }
-            else if (this.getPieceType() == PieceType.QUEEN){
-                return "q";
-            }
-            else if (this.getPieceType() == PieceType.KING){
-                return "k";
-            }
-        }
-        return " ";
+        return getPieceName();
     }
 }
