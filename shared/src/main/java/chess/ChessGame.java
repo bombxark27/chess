@@ -119,6 +119,15 @@ public class ChessGame {
 
 
     @Override
+    public Object clone() throws CloneNotSupportedException {
+        ChessGame clonedGame = (ChessGame) super.clone();
+        ChessBoard clonedBoard = clonedGame.getBoard();
+        TeamColor clonedTeam = clonedGame.getTeamTurn();
+
+        return clonedGame;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
