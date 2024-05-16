@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -65,7 +66,9 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new RuntimeException("Not implemented");
+        gameBoard.addPiece(move.getEndPosition(),gameBoard.getPiece(move.getStartPosition()));
+        gameBoard.addPiece(move.getStartPosition(),null);
+//        throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -75,7 +78,31 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        ChessPosition kingPosition = null;
+        ChessPosition pivot;
+        ChessPiece piece;
+        ArrayList<ChessMove> enemyMoves = new ArrayList<ChessMove>();
+        for (int row = 1; row <=8; row++){
+            for (int col = 1; col <=8; col++){
+                pivot = new ChessPosition(row,col);
+                if (gameBoard.getPiece(pivot) != null){
+                    piece = gameBoard.getPiece(pivot);
+                    if (piece.getPieceType() == ChessPiece.PieceType.KING && piece.getTeamColor() == teamColor){
+                        kingPosition = pivot;
+                    }
+                    else if (piece.getTeamColor() != teamColor){
+                        enemyMoves.addAll(piece.pieceMoves(gameBoard,pivot));
+                    }
+                }
+            }
+        }
+        for (ChessMove move : enemyMoves){
+            if (move.getEndPosition().equals(kingPosition)){
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -85,7 +112,8 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+
+        return false;
     }
 
     /**
