@@ -50,9 +50,25 @@ public class ChessGame {
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         ChessPiece myPiece;
+        ChessGame cloneGame;
+        ArrayList<ChessMove> possibleMoves = new ArrayList<ChessMove>();
         if (gameBoard.getPiece(startPosition) != null){
             myPiece = gameBoard.getPiece(startPosition);
-            return myPiece.pieceMoves(gameBoard,startPosition);
+            Collection<ChessMove> noRules = myPiece.pieceMoves(gameBoard,startPosition);
+            for (ChessMove move : noRules){
+                try {
+                    cloneGame = (ChessGame) this.clone();
+                } catch (CloneNotSupportedException e) {
+                    throw new RuntimeException(e);
+                }
+                ChessBoard cloneBoard = cloneGame.getBoard();
+                cloneBoard.addPiece(move.getEndPosition(),cloneBoard.getPiece(move.getStartPosition()));
+                cloneBoard.addPiece(move.getStartPosition(),null);
+                if (!cloneGame.isInCheck(teamTurn)){
+                    possibleMoves.add(move);
+                }
+            }
+            return possibleMoves;
         }
         else{
             return null;
@@ -66,6 +82,7 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
+
         gameBoard.addPiece(move.getEndPosition(),gameBoard.getPiece(move.getStartPosition()));
         gameBoard.addPiece(move.getStartPosition(),null);
 //        throw new RuntimeException("Not implemented");
