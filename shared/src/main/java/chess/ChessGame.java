@@ -121,9 +121,9 @@ public class ChessGame {
     @Override
     public Object clone() throws CloneNotSupportedException {
         ChessGame clonedGame = (ChessGame) super.clone();
-        ChessBoard clonedBoard = clonedGame.getBoard();
-        TeamColor clonedTeam = clonedGame.getTeamTurn();
-
+        //should be deep copy of the board
+        ChessBoard clonedBoard = (ChessBoard) gameBoard.clone();
+        clonedGame.gameBoard = clonedBoard;
         return clonedGame;
     }
 

@@ -111,6 +111,24 @@ public class ChessBoard {
         }
     }
 
+
+    @Override
+    public Object clone() throws CloneNotSupportedException{
+        ChessBoard clonedBoard = (ChessBoard) super.clone();
+        ChessPiece[][] clonedSquares = new ChessPiece[8][8];
+        ChessPosition pivot;
+        for (int row = 1; row <=8; row++){
+            for (int col = 1; col <=8; col++){
+                pivot = new ChessPosition(row,col);
+                if (this.getPiece(pivot) != null){
+                    clonedSquares[row-1][col-1] = (ChessPiece) squares[row-1][col-1].clone();
+                }
+            }
+        }
+        clonedBoard.squares = clonedSquares;
+        return clonedBoard;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
