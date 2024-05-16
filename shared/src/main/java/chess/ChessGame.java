@@ -10,7 +10,7 @@ import java.util.Objects;
  * Note: You can add to this class, but you may not alter
  * signature of the existing methods.
  */
-public class ChessGame {
+public class ChessGame implements Cloneable{
     private ChessBoard gameBoard = new ChessBoard();
     private TeamColor teamTurn = TeamColor.WHITE;
     public ChessGame() {
@@ -64,7 +64,11 @@ public class ChessGame {
                 ChessBoard cloneBoard = cloneGame.getBoard();
                 cloneBoard.addPiece(move.getEndPosition(),cloneBoard.getPiece(move.getStartPosition()));
                 cloneBoard.addPiece(move.getStartPosition(),null);
-                if (!cloneGame.isInCheck(teamTurn)){
+//                cloneGame.setBoard(cloneBoard);
+                if (this.isInCheck(teamTurn) && !cloneGame.isInCheck(teamTurn)){
+                    possibleMoves.add(move);
+                }
+                else if (!cloneGame.isInCheck(teamTurn)){
                     possibleMoves.add(move);
                 }
             }
@@ -129,8 +133,25 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-
-        return false;
+        boolean checkmate = false;
+        ChessPosition pivot;
+        ChessPiece piece;
+        ArrayList<ChessMove> possibleMoves = new ArrayList<ChessMove>();
+        for (int row = 1; row <=8; row++) {
+            for (int col = 1; col <= 8; col++) {
+                pivot = new ChessPosition(row, col);
+                if (gameBoard.getPiece(pivot) != null){
+                    piece = gameBoard.getPiece(pivot);
+                    if (piece.getTeamColor() == teamColor){
+                        possibleMoves.addAll(this.validMoves(pivot));
+                    }
+                }
+            }
+        }
+        if (possibleMoves.isEmpty()){
+            checkmate = true;
+        }
+        return checkmate;
     }
 
     /**
