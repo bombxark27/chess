@@ -55,20 +55,25 @@ public class ChessGame implements Cloneable{
         if (gameBoard.getPiece(startPosition) != null){
             myPiece = gameBoard.getPiece(startPosition);
             Collection<ChessMove> noRules = myPiece.pieceMoves(gameBoard,startPosition);
+            teamTurn = myPiece.getTeamColor();
             for (ChessMove move : noRules){
                 try {
                     cloneGame = (ChessGame) this.clone();
                 } catch (CloneNotSupportedException e) {
                     throw new RuntimeException(e);
                 }
+//                System.out.println(move);
                 ChessBoard cloneBoard = cloneGame.getBoard();
                 cloneBoard.addPiece(move.getEndPosition(),cloneBoard.getPiece(move.getStartPosition()));
                 cloneBoard.addPiece(move.getStartPosition(),null);
-//                cloneGame.setBoard(cloneBoard);
-                if (this.isInCheck(teamTurn) && !cloneGame.isInCheck(teamTurn)){
-                    possibleMoves.add(move);
+                cloneGame.setBoard(cloneBoard);
+                if (isInCheck(teamTurn) && cloneGame.isInCheck(teamTurn)){
+                    continue;
+//                    possibleMoves.add(move);
                 }
                 else if (!cloneGame.isInCheck(teamTurn)){
+//                    System.out.println(teamTurn);
+//                    System.out.println(cloneGame.getBoard());
                     possibleMoves.add(move);
                 }
             }
@@ -148,7 +153,7 @@ public class ChessGame implements Cloneable{
                 }
             }
         }
-        if (possibleMoves.isEmpty()){
+        if (possibleMoves.isEmpty() && isInCheck(teamColor)){
             checkmate = true;
         }
         return checkmate;
@@ -162,7 +167,26 @@ public class ChessGame implements Cloneable{
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        boolean stalemate = false;
+        ChessPosition pivot;
+        ChessPiece piece;
+        ArrayList<ChessMove> possibleMoves = new ArrayList<ChessMove>();
+        for (int row = 1; row <=8; row++) {
+            for (int col = 1; col <= 8; col++) {
+                pivot = new ChessPosition(row, col);
+                if (gameBoard.getPiece(pivot) != null){
+                    piece = gameBoard.getPiece(pivot);
+                    if (piece.getTeamColor() == teamColor){
+                        possibleMoves.addAll(this.validMoves(pivot));
+                    }
+                }
+            }
+        }
+        if (possibleMoves.isEmpty()){
+            stalemate = true;
+        }
+
+        return stalemate;
     }
 
     /**
