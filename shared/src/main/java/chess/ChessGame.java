@@ -119,7 +119,6 @@ public class ChessGame implements Cloneable{
         else {
             teamTurn = TeamColor.BLACK;
         }
-
     }
 
     /**
@@ -164,20 +163,7 @@ public class ChessGame implements Cloneable{
      */
     public boolean isInCheckmate(TeamColor teamColor) {
         boolean checkmate = false;
-        ChessPosition pivot;
-        ChessPiece piece;
-        ArrayList<ChessMove> possibleMoves = new ArrayList<ChessMove>();
-        for (int row = 1; row <=8; row++) {
-            for (int col = 1; col <= 8; col++) {
-                pivot = new ChessPosition(row, col);
-                if (gameBoard.getPiece(pivot) != null){
-                    piece = gameBoard.getPiece(pivot);
-                    if (piece.getTeamColor() == teamColor){
-                        possibleMoves.addAll(this.validMoves(pivot));
-                    }
-                }
-            }
-        }
+        Collection<ChessMove> possibleMoves = getPossibleMoves(teamColor);
         if (possibleMoves.isEmpty() && isInCheck(teamColor)){
             checkmate = true;
         }
@@ -193,24 +179,13 @@ public class ChessGame implements Cloneable{
      */
     public boolean isInStalemate(TeamColor teamColor) {
         boolean stalemate = false;
-        ChessPosition pivot;
-        ChessPiece piece;
-        ArrayList<ChessMove> possibleMoves = new ArrayList<ChessMove>();
-        for (int row = 1; row <=8; row++) {
-            for (int col = 1; col <= 8; col++) {
-                pivot = new ChessPosition(row, col);
-                if (gameBoard.getPiece(pivot) != null){
-                    piece = gameBoard.getPiece(pivot);
-                    if (piece.getTeamColor() == teamColor){
-                        possibleMoves.addAll(this.validMoves(pivot));
-                    }
-                }
-            }
+        if (isInCheckmate(teamColor)){
+            return stalemate;
         }
+        Collection<ChessMove> possibleMoves = getPossibleMoves(teamColor);
         if (possibleMoves.isEmpty()){
             stalemate = true;
         }
-
         return stalemate;
     }
 
@@ -230,6 +205,24 @@ public class ChessGame implements Cloneable{
      */
     public ChessBoard getBoard() {
         return gameBoard;
+    }
+
+    public Collection<ChessMove> getPossibleMoves(TeamColor teamColor) {
+        ChessPosition pivot;
+        ChessPiece piece;
+        ArrayList<ChessMove> possibleMoves = new ArrayList<ChessMove>();
+        for (int row = 1; row <=8; row++) {
+            for (int col = 1; col <= 8; col++) {
+                pivot = new ChessPosition(row, col);
+                if (gameBoard.getPiece(pivot) != null){
+                    piece = gameBoard.getPiece(pivot);
+                    if (piece.getTeamColor() == teamColor){
+                        possibleMoves.addAll(this.validMoves(pivot));
+                    }
+                }
+            }
+        }
+        return possibleMoves;
     }
 
 
