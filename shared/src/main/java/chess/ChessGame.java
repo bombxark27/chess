@@ -51,6 +51,7 @@ public class ChessGame implements Cloneable{
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         ChessPiece myPiece;
         ChessGame cloneGame;
+        TeamColor turn = teamTurn;
         ArrayList<ChessMove> possibleMoves = new ArrayList<ChessMove>();
         if (gameBoard.getPiece(startPosition) != null){
             myPiece = gameBoard.getPiece(startPosition);
@@ -77,6 +78,7 @@ public class ChessGame implements Cloneable{
                     possibleMoves.add(move);
                 }
             }
+            teamTurn = turn;
             return possibleMoves;
         }
         else{
@@ -91,10 +93,33 @@ public class ChessGame implements Cloneable{
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
+        ChessPosition startPosition = move.getStartPosition();
+        Collection<ChessMove> possibleMoves = validMoves(startPosition);
+        if (gameBoard.getPiece(startPosition) == null){
+            throw new InvalidMoveException("No piece at startPosition");
+        }
+        else if (gameBoard.getPiece(startPosition).getTeamColor() != teamTurn) {
+            throw new InvalidMoveException("Not your turn");
+        }
+        else if (!possibleMoves.contains(move)) {
+            throw new InvalidMoveException("Move not possible");
+        }
+        ChessPiece pawnPromotionPiece = null;
+        if (move.getPromotionPiece() != null){
+            pawnPromotionPiece = new ChessPiece(gameBoard.getPiece(startPosition).getTeamColor(),move.getPromotionPiece());
+            gameBoard.addPiece(move.getEndPosition(), pawnPromotionPiece);
+        }
+        else {
+            gameBoard.addPiece(move.getEndPosition(), gameBoard.getPiece(move.getStartPosition()));
+        }
+        gameBoard.addPiece(move.getStartPosition(), null);
+        if (teamTurn == TeamColor.BLACK){
+            teamTurn = TeamColor.WHITE;
+        }
+        else {
+            teamTurn = TeamColor.BLACK;
+        }
 
-        gameBoard.addPiece(move.getEndPosition(),gameBoard.getPiece(move.getStartPosition()));
-        gameBoard.addPiece(move.getStartPosition(),null);
-//        throw new RuntimeException("Not implemented");
     }
 
     /**
