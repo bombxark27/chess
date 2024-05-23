@@ -63,18 +63,14 @@ public class ChessGame implements Cloneable{
                 } catch (CloneNotSupportedException e) {
                     throw new RuntimeException(e);
                 }
-//                System.out.println(move);
                 ChessBoard cloneBoard = cloneGame.getBoard();
                 cloneBoard.addPiece(move.getEndPosition(),cloneBoard.getPiece(move.getStartPosition()));
                 cloneBoard.addPiece(move.getStartPosition(),null);
                 cloneGame.setBoard(cloneBoard);
                 if (isInCheck(teamTurn) && cloneGame.isInCheck(teamTurn)){
                     continue;
-//                    possibleMoves.add(move);
                 }
                 else if (!cloneGame.isInCheck(teamTurn)){
-//                    System.out.println(teamTurn);
-//                    System.out.println(cloneGame.getBoard());
                     possibleMoves.add(move);
                 }
             }
