@@ -10,17 +10,22 @@ public class MemoryGameDAO implements GameDAO{
     }
 
     @Override
-    public GameData getGame(int gameID) {
+    public GameData getGame(int gameID) throws DataAccessException{
         return null;
     }
 
     @Override
-    public GameData updateGame(String playerColor, int gameID) {
+    public GameData updateGame(String playerColor, int gameID) throws DataAccessException{
         return null;
     }
 
     @Override
     public GameData listGames() {
+        return null;
+    }
+
+    @Override
+    public GameData clear(){
         return null;
     }
 }

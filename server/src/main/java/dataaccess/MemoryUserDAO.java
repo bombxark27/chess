@@ -10,7 +10,12 @@ public class MemoryUserDAO implements UserDAO {
     }
 
     @Override
-    public UserData getUser(String username) {
+    public UserData getUser(String username) throws DataAccessException{
+        return null;
+    }
+
+    @Override
+    public UserData clear(){
         return null;
     }
 }

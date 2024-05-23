@@ -10,12 +10,17 @@ public class MemoryAuthDAO implements AuthDAO{
     }
 
     @Override
-    public AuthData getAuth(String username) {
+    public AuthData getAuth(String username) throws DataAccessException{
         return null;
     }
 
     @Override
-    public AuthData deleteAuth(String username) {
+    public AuthData deleteAuth(String username){
+        return null;
+    }
+
+    @Override
+    public AuthData clear(){
         return null;
     }
 }
