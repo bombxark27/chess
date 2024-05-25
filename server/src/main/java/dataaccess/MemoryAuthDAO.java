@@ -1,26 +1,42 @@
 package dataaccess;
 
 import model.AuthData;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class MemoryAuthDAO implements AuthDAO{
+    private static HashMap<String,AuthData> authDataMap = new HashMap<String, AuthData>();
 
     @Override
     public AuthData createAuth(String username) {
-        return null;
+        String authToken = UUID.randomUUID().toString();
+        AuthData authData = new AuthData(authToken, username);
+        authDataMap.put(authToken, authData);
+        return authData;
     }
 
     @Override
-    public AuthData getAuth(String username) throws DataAccessException{
-        return null;
+    public AuthData getAuth(String authToken) throws DataAccessException{
+        if (authDataMap.get(authToken) == null){
+            throw new DataAccessException("Auth token not found");
+        }
+        else{
+            return authDataMap.get(authToken);
+        }
     }
 
     @Override
-    public AuthData deleteAuth(String username){
-        return null;
+    public void deleteAuth(String authToken) throws DataAccessException {
+        if (authDataMap.containsKey(authToken)){
+            authDataMap.remove(authToken);
+        }
+        else{
+            throw new DataAccessException("Auth token not found");
+        }
     }
 
     @Override
-    public AuthData clear(){
-        return null;
+    public void clear(){
+        authDataMap.clear();
     }
 }
