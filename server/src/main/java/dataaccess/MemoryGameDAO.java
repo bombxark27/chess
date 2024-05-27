@@ -3,10 +3,11 @@ package dataaccess;
 import chess.ChessGame;
 import model.GameData;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Random;
 
 public class MemoryGameDAO implements GameDAO{
-    private static ArrayList<GameData> games = new ArrayList<GameData>();
+    private static Collection<GameData> games = new ArrayList<GameData>();
 
     @Override
     public int createGame(String gameName) throws DataAccessException{
@@ -38,7 +39,6 @@ public class MemoryGameDAO implements GameDAO{
     @Override
     public GameData updateGame(String playerColor, int gameID) throws DataAccessException{
         ChessGame.TeamColor chessColor;
-
         if (playerColor.equalsIgnoreCase("white")){
             chessColor = ChessGame.TeamColor.WHITE;
         }
@@ -48,18 +48,23 @@ public class MemoryGameDAO implements GameDAO{
         else{
             throw new DataAccessException("Invalid player color");
         }
-
-
-        return null;
+        ChessGame desiredGame;
+        for (GameData game : games){
+            if (game.gameID() == gameID){
+                desiredGame = game.game();
+                return game;
+            }
+        }
+        throw new DataAccessException("Game does not exist");
     }
 
     @Override
-    public GameData listGames() {
-        return null;
+    public Collection<GameData> listGames() {
+        return games;
     }
 
     @Override
-    public GameData clear(){
-        return null;
+    public void clearGame(){
+        games.clear();
     }
 }
