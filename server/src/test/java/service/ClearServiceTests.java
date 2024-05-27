@@ -10,6 +10,7 @@ import model.GameData;
 import model.UserData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class ClearServiceTests {
     }
 
     @Test
+    @DisplayName("Clear Database")
     public void clearDatabaseTest()  {
         UserData user = new UserData("abc","123","user@email.com");
         AuthData auth = new AuthData("abc","12ab34cd56ef");
