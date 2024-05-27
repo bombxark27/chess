@@ -20,7 +20,6 @@ public class RegisterService {
             userDataAccess.insertUser(user);
             authToken = authDataAccess.createAuth(user.username());
             result = authDataAccess.getAuth(authToken);
-
         } catch (DataAccessException e) {
             throw new RuntimeException(e);
         }

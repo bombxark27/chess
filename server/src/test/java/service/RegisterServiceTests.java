@@ -26,13 +26,15 @@ public class RegisterServiceTests {
     public void setUp(){
         expectedUserDAO = new ArrayList<UserData>();
         service = new RegisterService();
+        ClearService clearService = new ClearService();
+        clearService.clearDatabase();
 
 
     }
 
     @Test
     @DisplayName("Register New User")
-    public void registerNewUser(){
+    public void registerNewUser() throws DataAccessException {
         UserData expectedUser = new UserData("reg23","password5","reg23@email.com");
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         MemoryUserDAO userDataAccess = new MemoryUserDAO();
@@ -47,11 +49,25 @@ public class RegisterServiceTests {
 
     @Test
     @DisplayName("Register Invalid User")
-    public void registerInvalidUser(){
+    public void registerInvalidUser() throws DataAccessException {
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         service.register(newUser);
+        MemoryAuthDAO authDataAccess = new MemoryAuthDAO();
 
+        Assertions.assertFalse(authDataAccess.authDataInDatabase().isEmpty());
         Assertions.assertThrows(RuntimeException.class,()->service.register(newUser));
+    }
+
+    @Test
+    @DisplayName("Register Changed Other DAO")
+    public void registerChangedOtherDAO() throws DataAccessException {
+        UserData newUser = new UserData("reg23","password5","reg23@email.com");
+        service.register(newUser);
+        MemoryUserDAO otherUserDAO = new MemoryUserDAO();
+        expectedUserDAO.add(newUser);
+
+        Assertions.assertEquals(expectedUserDAO,otherUserDAO.usersInDatabase());
+        Assertions.assertFalse(otherUserDAO.usersInDatabase().isEmpty());
     }
 
 }
