@@ -40,12 +40,12 @@ public class ClearServiceTests {
         MemoryGameDAO gameDatabase = new MemoryGameDAO();
         try {
             userDatabase.insertUser(user);
-            authDatabase.insertAuth(auth);
+            authDatabase.createAuth(auth.username());
             gameDatabase.insertGame(game);
         } catch (DataAccessException e) {
             throw new RuntimeException(e);
         }
-        new ClearService().clearDatabase();
+        service.clearDatabase();
         Assertions.assertEquals(expectedAuthDAO,authDatabase.authDataInDatabase());
         Assertions.assertEquals(expectedGameDAO,gameDatabase.listGames());
         Assertions.assertEquals(expectedUserDAO,userDatabase.usersInDatabase());

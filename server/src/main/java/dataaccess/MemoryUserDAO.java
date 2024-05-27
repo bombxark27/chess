@@ -36,6 +36,18 @@ public class MemoryUserDAO implements UserDAO {
     }
 
     @Override
+    public boolean userExists(String username){
+        boolean exists = false;
+        for (UserData user : users){
+            if (user.username().equals(username)) {
+                exists = true;
+                break;
+            }
+        }
+        return exists;
+    }
+
+    @Override
     public Collection<UserData> usersInDatabase(){
         return users;
     }
