@@ -13,8 +13,9 @@ public class LoginService {
         MemoryAuthDAO authDataAccess = new MemoryAuthDAO();
         AuthData result;
         try {
-            userDataAccess.getUser(user.username(), user.password());
-            result = authDataAccess.getAuth(authDataAccess.createAuth(user.username()));
+            UserData existingUser = userDataAccess.getUser(user.username(), user.password());
+            String authToken = authDataAccess.createAuth(existingUser.username());
+            result = authDataAccess.getAuth(authToken);
         } catch (DataAccessException e) {
             throw new RuntimeException(e);
         }

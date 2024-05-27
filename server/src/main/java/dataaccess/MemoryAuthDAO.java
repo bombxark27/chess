@@ -13,14 +13,14 @@ public class MemoryAuthDAO implements AuthDAO{
         while (authDataMap.containsKey(authToken)){
             authToken = UUID.randomUUID().toString();
         }
-        AuthData authData = new AuthData(authToken, username);
+        AuthData authData = new AuthData(username, authToken);
         authDataMap.put(authToken, authData);
         return authToken;
     }
 
     @Override
     public AuthData getAuth(String authToken) throws DataAccessException{
-        if (authDataMap.get(authToken) == null){
+        if (!authDataMap.containsKey(authToken)){
             throw new DataAccessException("Auth token not found");
         }
         else{
@@ -34,7 +34,7 @@ public class MemoryAuthDAO implements AuthDAO{
             authDataMap.remove(authToken);
         }
         else{
-            throw new DataAccessException("Auth token not found");
+            throw new DataAccessException("Auth token not found: cannot delete auth token");
         }
     }
 

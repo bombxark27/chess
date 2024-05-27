@@ -44,6 +44,7 @@ public class RegisterServiceTests {
 
 
         Assertions.assertEquals(expectedUserDAO,userDataAccess.usersInDatabase());
+        Assertions.assertEquals(expectedUser,userDataAccess.getUser("reg23","password5"));
         Assertions.assertFalse(authDataAccess.authDataInDatabase().isEmpty());
     }
 
