@@ -1,5 +1,10 @@
 package service;
 
+import chess.ChessGame;
+import dataaccess.DataAccessException;
+import dataaccess.MemoryAuthDAO;
+import dataaccess.MemoryGameDAO;
+import dataaccess.MemoryUserDAO;
 import model.AuthData;
 import model.GameData;
 import model.UserData;
@@ -26,7 +31,25 @@ public class ClearServiceTests {
     }
 
     @Test
-    public void clearDatabaseTest(){
+    public void clearDatabaseTest()  {
+        UserData user = new UserData("abc","123","user@email.com");
+        AuthData auth = new AuthData("abc","12ab34cd56ef");
+        GameData game = new GameData(1234,null,null,"newGame",new ChessGame());
+        MemoryUserDAO userDatabase = new MemoryUserDAO();
+        MemoryAuthDAO authDatabase = new MemoryAuthDAO();
+        MemoryGameDAO gameDatabase = new MemoryGameDAO();
+        try {
+            userDatabase.insertUser(user);
+            authDatabase.insertAuth(auth);
+            gameDatabase.insertGame(game);
+        } catch (DataAccessException e) {
+            throw new RuntimeException(e);
+        }
+        new ClearService().clearDatabase();
+        Assertions.assertEquals(expectedAuthDAO,authDatabase.authDataInDatabase());
+        Assertions.assertEquals(expectedGameDAO,gameDatabase.listGames());
+        Assertions.assertEquals(expectedUserDAO,userDatabase.usersInDatabase());
+
 
     }
 }

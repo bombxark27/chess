@@ -36,6 +36,11 @@ public class MemoryUserDAO implements UserDAO {
     }
 
     @Override
+    public Collection<UserData> usersInDatabase(){
+        return users;
+    }
+
+    @Override
     public void clearUser(){
         users.clear();
     }

@@ -10,20 +10,31 @@ public class MemoryGameDAO implements GameDAO{
     private static Collection<GameData> games = new ArrayList<GameData>();
 
     @Override
-    public int createGame(String gameName) throws DataAccessException{
+    public GameData createGame(String gameName) throws DataAccessException{
         Random rand = new Random();
         int gameID = rand.nextInt(10000);
-        for (GameData game: games){
-            if (gameID == game.gameID()){
-                gameID = rand.nextInt(10000);
-            }
-            if (gameName.equals(game.gameName())){
-                throw new DataAccessException("Game name already exists");
+        boolean sameID = true;
+        while (sameID) {
+            sameID = false;
+            for (GameData game : games) {
+                if (gameID == game.gameID()) {
+                    sameID = true;
+                    gameID = rand.nextInt(10000);
+                }
+                if (gameName.equals(game.gameName())) {
+                    throw new DataAccessException("Game name already exists");
+                }
             }
         }
-        GameData newGame = new GameData(gameID, null, null, gameName, new ChessGame());
-        games.add(newGame);
-        return gameID;
+        return new GameData(gameID, null, null, gameName, new ChessGame());
+    }
+
+    @Override
+    public void insertGame(GameData data) throws DataAccessException{
+        if (games.contains(data)){
+            throw new DataAccessException("Game already exists");
+        }
+        games.add(data);
     }
 
     @Override
