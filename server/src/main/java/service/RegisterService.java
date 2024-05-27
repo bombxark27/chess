@@ -7,8 +7,6 @@ import dataaccess.MemoryUserDAO;
 import model.AuthData;
 import model.UserData;
 
-import request.RegisterRequest;
-import result.RegisterResult;
 
 public class RegisterService {
     AuthData register(UserData user){
