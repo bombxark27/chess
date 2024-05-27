@@ -48,7 +48,10 @@ public class RegisterServiceTests {
     @Test
     @DisplayName("Register Invalid User")
     public void registerInvalidUser(){
+        UserData newUser = new UserData("reg23","password5","reg23@email.com");
+        service.register(newUser);
 
+        Assertions.assertThrows(RuntimeException.class,()->service.register(newUser));
     }
 
 }
