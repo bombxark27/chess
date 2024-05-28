@@ -8,7 +8,7 @@ import model.AuthData;
 import model.UserData;
 
 public class LoginService {
-    AuthData login(UserData user){
+    public AuthData login(UserData user){
         MemoryUserDAO userDataAccess = new MemoryUserDAO();
         MemoryAuthDAO authDataAccess = new MemoryAuthDAO();
         AuthData result;

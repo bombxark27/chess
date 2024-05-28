@@ -9,7 +9,7 @@ import model.UserData;
 
 
 public class RegisterService {
-    AuthData register(UserData user){
+    public AuthData register(UserData user){
         MemoryAuthDAO authDataAccess = new MemoryAuthDAO();
         MemoryUserDAO userDataAccess = new MemoryUserDAO();
         String authToken;
