@@ -12,6 +12,9 @@ public class RegisterHandler implements HttpHandler{
             if(exchange.getRequestMethod().equals("POST")){
 
                 String reqBody = exchange.getRequestBody().toString();
+
+
+
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
             }
         }
