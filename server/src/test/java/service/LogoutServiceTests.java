@@ -44,7 +44,7 @@ public class LogoutServiceTests {
 
     @Test
     @DisplayName("Successful Logout")
-    public void testSuccessfulLogout() throws DataAccessException {
+    public void testSuccessfulLogout() throws RuntimeException {
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         expectedUsers.add(newUser);
 
@@ -67,7 +67,15 @@ public class LogoutServiceTests {
 
     @Test
     @DisplayName("AuthToken Doesn't Exist")
-    public void testAuthTokenDoesntExist() throws DataAccessException {
+    public void testAuthTokenDoesntExist() throws RuntimeException {
+        UserData newUser = new UserData("reg23","password5","reg23@email.com");
+        expectedUsers.add(newUser);
+
+        registerService.register(newUser);
+
+        loginService.login(newUser);
+
+        Assertions.assertThrows(RuntimeException.class, () -> logoutService.logout("fakeAuthToken"));
 
     }
 
