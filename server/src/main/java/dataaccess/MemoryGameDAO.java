@@ -1,6 +1,7 @@
 package dataaccess;
 
 import chess.ChessGame;
+import model.AuthData;
 import model.GameData;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,7 +49,12 @@ public class MemoryGameDAO implements GameDAO{
     }
 
     @Override
-    public GameData updateGame(String playerColor, int gameID) throws DataAccessException{
+    public void updateGame(String authToken, String playerColor, int gameID) throws DataAccessException{
+        boolean updated = false;
+
+        MemoryAuthDAO authDataAccess = new MemoryAuthDAO();
+        AuthData authorization = authDataAccess.getAuth(authToken);
+
         ChessGame.TeamColor chessColor;
         if (playerColor.equalsIgnoreCase("white")){
             chessColor = ChessGame.TeamColor.WHITE;
@@ -59,14 +65,33 @@ public class MemoryGameDAO implements GameDAO{
         else{
             throw new DataAccessException("Invalid player color");
         }
-        ChessGame desiredGame;
+
+        GameData oldGame = null;
+        GameData updatedGame = null;
         for (GameData game : games){
             if (game.gameID() == gameID){
-                desiredGame = game.game();
-                return game;
+                oldGame = game;
+                if (chessColor == ChessGame.TeamColor.WHITE && game.whiteUsername() == null){
+                    updatedGame = new GameData(gameID,authorization.username(),game.blackUsername(),game.gameName(),game.game());
+                }
+                else if (chessColor == ChessGame.TeamColor.WHITE && game.whiteUsername() != null){
+                    throw new DataAccessException("White already taken");
+                }
+                if (chessColor == ChessGame.TeamColor.BLACK && game.blackUsername() == null){
+                    updatedGame = new GameData(gameID,game.whiteUsername(),authorization.username(),game.gameName(),game.game());
+                }
+                else if (chessColor == ChessGame.TeamColor.BLACK && game.blackUsername() != null){
+                    throw new DataAccessException("Black already taken");
+                }
+                updated = true;
+                break;
             }
         }
-        throw new DataAccessException("Game does not exist");
+        if(!updated) {
+            throw new DataAccessException("Game does not exist");
+        }
+        games.remove(oldGame);
+        games.add(updatedGame);
     }
 
     @Override
