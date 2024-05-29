@@ -86,10 +86,26 @@ public class Server {
         });
 
 
-        Spark.exception(DataAccessException.class, (exception, request, response) -> {
-            // Handle the exception here
+
+        Spark.exception(BadRequestResult.class, (exception, request, response) -> {
             response.status(400);
             response.body(serializer.toJson("Error: bad request"));
+        });
+        Spark.exception(UnauthorizedResult.class, (exception, request, response) -> {
+            response.status(401);
+            response.body(serializer.toJson("Error: unauthorized"));
+        });
+        Spark.exception(AlreadyTakenResult.class, (exception, request, response) -> {
+            response.status(403);
+            response.body(serializer.toJson("Error: already taken"));
+        });
+        Spark.exception(DataAccessException.class, (exception, request, response) -> {
+            response.status(500);
+            response.body(serializer.toJson(STR."Error: \{exception.getMessage()}"));
+        });
+        Spark.exception(InternalServiceErrorResult.class, (exception, request, response) -> {
+            response.status(500);
+            response.body(serializer.toJson(STR."Error: \{exception.getMessage()}"));
         });
 
         Spark.awaitInitialization();

@@ -35,7 +35,7 @@ public class LoginServiceTests {
 
     @Test
     @DisplayName("Successful Login")
-    public void successfulLogin() throws RuntimeException {
+    public void successfulLogin() throws Exception {
         UserData expectedUser = new UserData("reg23","password5","reg23@email.com");
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         RegisterService registerService = new RegisterService();

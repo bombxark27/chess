@@ -44,7 +44,7 @@ public class LogoutServiceTests {
 
     @Test
     @DisplayName("Successful Logout")
-    public void testSuccessfulLogout() throws RuntimeException {
+    public void testSuccessfulLogout() throws Exception {
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         expectedUsers.add(newUser);
 
@@ -67,7 +67,7 @@ public class LogoutServiceTests {
 
     @Test
     @DisplayName("AuthToken Doesn't Exist")
-    public void testAuthTokenDoesntExist() throws RuntimeException {
+    public void testAuthTokenDoesntExist() throws Exception {
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         expectedUsers.add(newUser);
 
