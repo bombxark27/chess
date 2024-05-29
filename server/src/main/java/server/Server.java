@@ -42,7 +42,6 @@ public class Server {
 
         Spark.post("/user", (request, response) -> {
             AuthData authData = registerService.register(serializer.fromJson(request.body(), UserData.class));
-            response.status(200);
             return serializer.toJson(authData);
         });
 
@@ -54,7 +53,6 @@ public class Server {
 
         Spark.delete("/session", (request,response) -> {
             logoutService.logout(request.headers("Authorization"));
-            response.status(200);
             return "{}";
         });
 
@@ -78,8 +76,6 @@ public class Server {
             String authToken = request.headers("Authorization");
             JoinGameRequest joinGameRequest = serializer.fromJson(request.body(), JoinGameRequest.class);
             joinGameService.joinGame(authToken, joinGameRequest.playerColor(), joinGameRequest.gameID());
-
-            response.status(200);
             return "{}";
         });
 
@@ -99,11 +95,11 @@ public class Server {
         });
         Spark.exception(DataAccessException.class, (exception, request, response) -> {
             response.status(500);
-            response.body(serializer.toJson(new FailureResult(STR."Error: \{exception.getMessage()}")));
+            response.body(serializer.toJson(new FailureResult("Error: " + exception.getMessage())));
         });
         Spark.exception(InternalServiceErrorResult.class, (exception, request, response) -> {
             response.status(500);
-            response.body(serializer.toJson(new FailureResult(STR."Error: \{exception.getMessage()}")));
+            response.body(serializer.toJson(new FailureResult("Error: " + exception.getMessage())));
         });
 
         Spark.awaitInitialization();
