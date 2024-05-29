@@ -9,6 +9,21 @@ public interface PieceMovesCalculator {
 }
 
 class PawnMovesCalculator implements PieceMovesCalculator {
+    public Collection<ChessMove> pawnPromotion(ChessPosition myPosition, int row, int col){
+        ChessPosition tempPosition = new ChessPosition(row, myPosition.getColumn());
+        ArrayList<ChessMove> possibleMoves = new ArrayList<>();
+
+        ChessMove move = new ChessMove(myPosition,tempPosition, ChessPiece.PieceType.QUEEN);
+        possibleMoves.add(move);
+        move = new ChessMove(myPosition, tempPosition, ChessPiece.PieceType.ROOK);
+        possibleMoves.add(move);
+        move = new ChessMove(myPosition,tempPosition, ChessPiece.PieceType.KNIGHT);
+        possibleMoves.add(move);
+        move = new ChessMove(myPosition,tempPosition, ChessPiece.PieceType.BISHOP);
+        possibleMoves.add(move);
+        return possibleMoves;
+    }
+
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         ArrayList<ChessMove> possibleMoves = new ArrayList<ChessMove>();
@@ -24,14 +39,7 @@ class PawnMovesCalculator implements PieceMovesCalculator {
                 }
                 if( (board.getPiece(tempPosition) != null) && (board.getPiece(tempPosition).getTeamColor() != ChessGame.TeamColor.WHITE) ){
                     if (tempPosition.getRow() == 8){
-                        ChessMove move = new ChessMove(myPosition,tempPosition, ChessPiece.PieceType.QUEEN);
-                        possibleMoves.add(move);
-                        move = new ChessMove(myPosition, tempPosition, ChessPiece.PieceType.ROOK);
-                        possibleMoves.add(move);
-                        move = new ChessMove(myPosition,tempPosition, ChessPiece.PieceType.KNIGHT);
-                        possibleMoves.add(move);
-                        move = new ChessMove(myPosition,tempPosition, ChessPiece.PieceType.BISHOP);
-                        possibleMoves.add(move);
+                        possibleMoves.addAll(pawnPromotion(myPosition, 8, currentCol+i));
                         break;
                     }
                     ChessMove move = new ChessMove(myPosition,tempPosition,null);
@@ -41,14 +49,7 @@ class PawnMovesCalculator implements PieceMovesCalculator {
             tempPosition = new ChessPosition(currentRow+1,currentCol);
             if(board.getPiece(tempPosition) == null){
                 if (tempPosition.getRow() == 8){
-                    ChessMove move = new ChessMove(myPosition,tempPosition, ChessPiece.PieceType.QUEEN);
-                    possibleMoves.add(move);
-                    move = new ChessMove(myPosition, tempPosition, ChessPiece.PieceType.ROOK);
-                    possibleMoves.add(move);
-                    move = new ChessMove(myPosition,tempPosition, ChessPiece.PieceType.KNIGHT);
-                    possibleMoves.add(move);
-                    move = new ChessMove(myPosition,tempPosition, ChessPiece.PieceType.BISHOP);
-                    possibleMoves.add(move);
+                    possibleMoves.addAll(pawnPromotion(myPosition,8, currentCol));
                 }
                 else {
                     ChessMove move = new ChessMove(myPosition, tempPosition, null);
@@ -71,14 +72,7 @@ class PawnMovesCalculator implements PieceMovesCalculator {
                 }
                 if( (board.getPiece(tempPosition) != null) && (board.getPiece(tempPosition).getTeamColor() != ChessGame.TeamColor.BLACK) ){
                     if (tempPosition.getRow() == 1){
-                        ChessMove move = new ChessMove(myPosition,tempPosition, ChessPiece.PieceType.QUEEN);
-                        possibleMoves.add(move);
-                        move = new ChessMove(myPosition, tempPosition, ChessPiece.PieceType.ROOK);
-                        possibleMoves.add(move);
-                        move = new ChessMove(myPosition,tempPosition, ChessPiece.PieceType.KNIGHT);
-                        possibleMoves.add(move);
-                        move = new ChessMove(myPosition,tempPosition, ChessPiece.PieceType.BISHOP);
-                        possibleMoves.add(move);
+                        possibleMoves.addAll(pawnPromotion(myPosition,1, currentCol+i));
                         break;
                     }
                     ChessMove move = new ChessMove(myPosition,tempPosition,null);
@@ -88,14 +82,7 @@ class PawnMovesCalculator implements PieceMovesCalculator {
             tempPosition = new ChessPosition(currentRow-1,currentCol);
             if(board.getPiece(tempPosition) == null){
                 if (tempPosition.getRow() == 1){
-                    ChessMove move = new ChessMove(myPosition,tempPosition, ChessPiece.PieceType.QUEEN);
-                    possibleMoves.add(move);
-                    move = new ChessMove(myPosition, tempPosition, ChessPiece.PieceType.ROOK);
-                    possibleMoves.add(move);
-                    move = new ChessMove(myPosition,tempPosition, ChessPiece.PieceType.KNIGHT);
-                    possibleMoves.add(move);
-                    move = new ChessMove(myPosition,tempPosition, ChessPiece.PieceType.BISHOP);
-                    possibleMoves.add(move);
+                    possibleMoves.addAll(pawnPromotion(myPosition,1, currentCol));
                 }
                 else {
                     ChessMove move = new ChessMove(myPosition, tempPosition, null);
