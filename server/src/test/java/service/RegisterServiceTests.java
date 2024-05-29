@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import result.AlreadyTakenResult;
+import result.BadRequestResult;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -51,12 +53,19 @@ public class RegisterServiceTests {
     @Test
     @DisplayName("Register Invalid User")
     public void registerInvalidUser() throws Exception {
+        UserData newUser = new UserData("reg23",null,null);
+        Assertions.assertThrows(BadRequestResult.class,()->service.register(newUser));
+    }
+
+    @Test
+    @DisplayName("Re-Register User")
+    public void reRegisterUser() throws Exception {
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         service.register(newUser);
         MemoryAuthDAO authDataAccess = new MemoryAuthDAO();
 
         Assertions.assertFalse(authDataAccess.authDataInDatabase().isEmpty());
-        Assertions.assertThrows(RuntimeException.class,()->service.register(newUser));
+        Assertions.assertThrows(AlreadyTakenResult.class,()->service.register(newUser));
     }
 
     @Test

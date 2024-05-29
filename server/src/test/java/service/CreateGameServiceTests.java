@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import result.BadRequestResult;
+import result.UnauthorizedResult;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,11 +37,11 @@ public class CreateGameServiceTests {
 
     @Test
     @DisplayName("Create Valid Game")
-    public void createValidGame(){
+    public void createValidGame() throws Exception{
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         String authToken = authDataAccess.createAuth(newUser.username());
 
-        int gameID = createGameService.createGame(authToken,"validGame");
+        int gameID = createGameService.createGame("validGame", authToken);
 
         GameData expectedGame = new GameData(gameID,null,null,"validGame",new ChessGame());
         expectedGames.add(expectedGame);
@@ -47,7 +49,7 @@ public class CreateGameServiceTests {
         Assertions.assertFalse(gameDataAccess.listGames().isEmpty());
         Assertions.assertEquals(expectedGames,gameDataAccess.listGames());
 
-        int otherID = createGameService.createGame(authToken,"anotherValidGame");
+        int otherID = createGameService.createGame("anotherValidGame", authToken);
 
         GameData otherGame = new GameData(otherID,null,null,"anotherValidGame",new ChessGame());
         expectedGames.add(otherGame);
@@ -58,13 +60,13 @@ public class CreateGameServiceTests {
 
     @Test
     @DisplayName("GameAlreadyExists")
-    public void gameAlreadyExists(){
+    public void gameAlreadyExists() throws Exception{
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         String authToken = authDataAccess.createAuth(newUser.username());
 
-        createGameService.createGame(authToken,"validGame");
+        createGameService.createGame("validGame",authToken);
 
-        Assertions.assertThrows(RuntimeException.class, () -> createGameService.createGame(authToken,"validGame"));
+        Assertions.assertThrows(BadRequestResult.class, () -> createGameService.createGame("validGame", authToken));
 
 
     }
@@ -75,8 +77,8 @@ public class CreateGameServiceTests {
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         String authToken = authDataAccess.createAuth(newUser.username());
 
-        Assertions.assertThrows(RuntimeException.class, () ->
-                createGameService.createGame("invalidToken","error"));
+        Assertions.assertThrows(UnauthorizedResult.class, () ->
+                createGameService.createGame("error","invalidToken"));
     }
 
 }

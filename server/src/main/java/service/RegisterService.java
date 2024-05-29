@@ -6,6 +6,7 @@ import dataaccess.MemoryUserDAO;
 
 import model.AuthData;
 import model.UserData;
+import result.AlreadyTakenResult;
 import result.BadRequestResult;
 
 
@@ -16,12 +17,15 @@ public class RegisterService {
         String authToken;
         AuthData result;
 
+        if (user.username() == null || user.password() == null || user.email() == null) {
+            throw new BadRequestResult();
+        }
         try {
             userDataAccess.insertUser(user);
             authToken = authDataAccess.createAuth(user.username());
             result = authDataAccess.getAuth(authToken);
         } catch (DataAccessException e) {
-            throw new BadRequestResult();
+            throw new AlreadyTakenResult();
         }
 
         return result;

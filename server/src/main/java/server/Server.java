@@ -54,14 +54,12 @@ public class Server {
 
         Spark.delete("/session", (request,response) -> {
             logoutService.logout(request.headers("Authorization"));
-
             response.status(200);
             return "{}";
         });
 
         Spark.get("/game", (request, response) -> {
             Collection<GameData> games = listGamesService.listGames(request.headers("Authorization"));
-
             response.status(200);
             return serializer.toJson(games);
         });
@@ -73,7 +71,6 @@ public class Server {
 
             CreateGameResult createGameResult = new CreateGameResult(gameID);
 
-            response.status(200);
             return serializer.toJson(createGameResult);
         });
 

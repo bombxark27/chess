@@ -38,7 +38,7 @@ public class JoinGameServiceTests {
 
     @Test
     @DisplayName("Valid Join")
-    public void validJoin(){
+    public void validJoin() throws Exception{
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         String authToken = authDataAccess.createAuth(newUser.username());
 
@@ -69,7 +69,7 @@ public class JoinGameServiceTests {
 
     @Test
     @DisplayName("White Player Taken")
-    public void whitePlayerTaken(){
+    public void whitePlayerTaken() throws Exception{
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         String authToken = authDataAccess.createAuth(newUser.username());
 
@@ -93,7 +93,7 @@ public class JoinGameServiceTests {
 
     @Test
     @DisplayName("Black Player Taken")
-    public void blackPlayerTaken(){
+    public void blackPlayerTaken() throws Exception{
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         String authToken = authDataAccess.createAuth(newUser.username());
 
@@ -116,7 +116,7 @@ public class JoinGameServiceTests {
 
     @Test
     @DisplayName("Unauthorized Join")
-    public void unauthorizedJoin(){
+    public void unauthorizedJoin() throws Exception{
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         String authToken = authDataAccess.createAuth(newUser.username());
 
@@ -129,7 +129,7 @@ public class JoinGameServiceTests {
 
     @Test
     @DisplayName("Invalid Game")
-    public void invalidGame(){
+    public void invalidGame() throws Exception{
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         String authToken = authDataAccess.createAuth(newUser.username());
 

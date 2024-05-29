@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import result.UnauthorizedResult;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -61,7 +62,7 @@ public class LoginServiceTests {
         registerService.register(newUser);
 
         Assertions.assertEquals(expectedUserDatabase,userMemory.usersInDatabase());
-        Assertions.assertThrows(RuntimeException.class, () -> loginService.login(badUser));
+        Assertions.assertThrows(UnauthorizedResult.class, () -> loginService.login(badUser));
     }
 
     @Test
@@ -75,6 +76,6 @@ public class LoginServiceTests {
         registerService.register(newUser);
 
         Assertions.assertEquals(expectedUserDatabase,userMemory.usersInDatabase());
-        Assertions.assertThrows(RuntimeException.class, () -> loginService.login(badUser));
+        Assertions.assertThrows(UnauthorizedResult.class, () -> loginService.login(badUser));
     }
 }

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import result.UnauthorizedResult;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -75,7 +76,7 @@ public class LogoutServiceTests {
 
         loginService.login(newUser);
 
-        Assertions.assertThrows(RuntimeException.class, () -> logoutService.logout("fakeAuthToken"));
+        Assertions.assertThrows(UnauthorizedResult.class, () -> logoutService.logout("fakeAuthToken"));
 
     }
 
