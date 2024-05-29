@@ -13,6 +13,7 @@ import result.AlreadyTakenResult;
 import result.BadRequestResult;
 import result.InternalServiceErrorResult;
 import result.UnauthorizedResult;
+import result.FailureResult;
 import service.*;
 import spark.*;
 
@@ -89,23 +90,23 @@ public class Server {
 
         Spark.exception(BadRequestResult.class, (exception, request, response) -> {
             response.status(400);
-            response.body(serializer.toJson("Error: bad request"));
+            response.body(serializer.toJson(new FailureResult("Error: bad request")));
         });
         Spark.exception(UnauthorizedResult.class, (exception, request, response) -> {
             response.status(401);
-            response.body(serializer.toJson("Error: unauthorized"));
+            response.body(serializer.toJson(new FailureResult("Error: unauthorized")));
         });
         Spark.exception(AlreadyTakenResult.class, (exception, request, response) -> {
             response.status(403);
-            response.body(serializer.toJson("Error: already taken"));
+            response.body(serializer.toJson(new FailureResult("Error: already taken")));
         });
         Spark.exception(DataAccessException.class, (exception, request, response) -> {
             response.status(500);
-            response.body(serializer.toJson(STR."Error: \{exception.getMessage()}"));
+            response.body(serializer.toJson(new FailureResult(STR."Error: \{exception.getMessage()}")));
         });
         Spark.exception(InternalServiceErrorResult.class, (exception, request, response) -> {
             response.status(500);
-            response.body(serializer.toJson(STR."Error: \{exception.getMessage()}"));
+            response.body(serializer.toJson(new FailureResult(STR."Error: \{exception.getMessage()}")));
         });
 
         Spark.awaitInitialization();
