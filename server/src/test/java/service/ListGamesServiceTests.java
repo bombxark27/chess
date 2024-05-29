@@ -35,7 +35,7 @@ public class ListGamesServiceTests {
 
     @Test
     @DisplayName("Return Empty Games")
-    public void returnEmptyGames() throws RuntimeException{
+    public void returnEmptyGames() throws Exception{
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         String authToken = authDataAccess.createAuth(newUser.username());
         Collection<GameData> actualGames = listGamesService.listGames(authToken);
@@ -46,7 +46,7 @@ public class ListGamesServiceTests {
 
     @Test
     @DisplayName("Small Amount Games")
-    public void smallAmountGames() throws RuntimeException{
+    public void smallAmountGames() throws Exception{
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         String authToken = authDataAccess.createAuth(newUser.username());
 
@@ -76,7 +76,7 @@ public class ListGamesServiceTests {
 
     @Test
     @DisplayName("Not Authorized")
-    public void notAuthorized() throws RuntimeException{
+    public void notAuthorized() throws Exception{
         Assertions.assertThrows(RuntimeException.class,() -> listGamesService.listGames("unauthorizedToken"));
     }
 }

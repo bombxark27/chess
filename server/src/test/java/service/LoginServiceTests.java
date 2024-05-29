@@ -52,7 +52,7 @@ public class LoginServiceTests {
 
     @Test
     @DisplayName("Invalid Username")
-    public void invalidUsername() throws RuntimeException {
+    public void invalidUsername() throws Exception {
         UserData badUser = new UserData("invalid","password5","reg23@email.com");
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         RegisterService registerService = new RegisterService();
@@ -66,7 +66,7 @@ public class LoginServiceTests {
 
     @Test
     @DisplayName("Invalid Password")
-    public void invalidPassword() throws DataAccessException {
+    public void invalidPassword() throws Exception {
         UserData badUser = new UserData("reg23","wrongPassword2","reg23@email.com");
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         RegisterService registerService = new RegisterService();

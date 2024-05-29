@@ -6,10 +6,11 @@ import dataaccess.MemoryUserDAO;
 
 import model.AuthData;
 import model.UserData;
+import result.BadRequestResult;
 
 
 public class RegisterService {
-    public AuthData register(UserData user){
+    public AuthData register(UserData user) throws Exception{
         MemoryAuthDAO authDataAccess = new MemoryAuthDAO();
         MemoryUserDAO userDataAccess = new MemoryUserDAO();
         String authToken;
@@ -20,7 +21,7 @@ public class RegisterService {
             authToken = authDataAccess.createAuth(user.username());
             result = authDataAccess.getAuth(authToken);
         } catch (DataAccessException e) {
-            throw new RuntimeException(e);
+            throw new BadRequestResult();
         }
 
         return result;

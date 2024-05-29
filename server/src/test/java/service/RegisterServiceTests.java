@@ -34,7 +34,7 @@ public class RegisterServiceTests {
 
     @Test
     @DisplayName("Register New User")
-    public void registerNewUser() throws DataAccessException {
+    public void registerNewUser() throws Exception {
         UserData expectedUser = new UserData("reg23","password5","reg23@email.com");
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         MemoryUserDAO userDataAccess = new MemoryUserDAO();
@@ -50,7 +50,7 @@ public class RegisterServiceTests {
 
     @Test
     @DisplayName("Register Invalid User")
-    public void registerInvalidUser() throws DataAccessException {
+    public void registerInvalidUser() throws Exception {
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         service.register(newUser);
         MemoryAuthDAO authDataAccess = new MemoryAuthDAO();
@@ -61,7 +61,7 @@ public class RegisterServiceTests {
 
     @Test
     @DisplayName("Register Changed Other DAO")
-    public void registerChangedOtherDAO() throws DataAccessException {
+    public void registerChangedOtherDAO() throws Exception {
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         service.register(newUser);
         MemoryUserDAO otherUserDAO = new MemoryUserDAO();
