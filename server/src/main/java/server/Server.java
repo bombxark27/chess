@@ -9,6 +9,10 @@ import request.CreateGameRequest;
 import request.JoinGameRequest;
 import result.CreateGameResult;
 import result.ListGamesResult;
+import result.AlreadyTakenResult;
+import result.BadRequestResult;
+import result.InternalServiceErrorResult;
+import result.UnauthorizedResult;
 import service.*;
 import spark.*;
 
@@ -32,7 +36,6 @@ public class Server {
         // Register your endpoints and handle exceptions here.
         Spark.delete("/db", (request, response) -> {
             clearService.clearDatabase();
-            response.status(200);
             return "{}";
         });
 
@@ -45,7 +48,6 @@ public class Server {
         Spark.post("/session" , (request,response) -> {
             UserData userData = serializer.fromJson(request.body(), UserData.class);
             AuthData authData = loginService.login(userData);
-//            response.status(200);
             return serializer.toJson(authData);
         });
 
@@ -64,10 +66,14 @@ public class Server {
         });
 
         Spark.post("/game", (request,response) -> {
-            int gameID = createGameService.createGame(serializer.fromJson(request.body(),String.class),request.headers("Authorization"));
+
+            CreateGameRequest createGameRequest = serializer.fromJson(request.body(), CreateGameRequest.class);
+            int gameID = createGameService.createGame(String.valueOf(createGameRequest),request.headers("Authorization"));
+
+            CreateGameResult createGameResult = new CreateGameResult(gameID);
 
             response.status(200);
-            return serializer.toJson(gameID);
+            return serializer.toJson(createGameResult);
         });
 
         Spark.put("/game", (request,response) -> {
