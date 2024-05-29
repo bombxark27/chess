@@ -13,6 +13,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import result.AlreadyTakenResult;
+import result.BadRequestResult;
+import result.UnauthorizedResult;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,7 +45,7 @@ public class JoinGameServiceTests {
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         String authToken = authDataAccess.createAuth(newUser.username());
 
-        int gameID = createGameService.createGame(authToken,"validGame");
+        int gameID = createGameService.createGame("validGame",authToken);
 
         GameData expectedGame = new GameData(gameID,"reg23",null,"validGame",new ChessGame());
         expectedGames.add(expectedGame);
@@ -73,7 +76,7 @@ public class JoinGameServiceTests {
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         String authToken = authDataAccess.createAuth(newUser.username());
 
-        int gameID = createGameService.createGame(authToken,"validGame");
+        int gameID = createGameService.createGame("validGame",authToken);
 
         GameData expectedGame = new GameData(gameID,"reg23",null,"validGame",new ChessGame());
         expectedGames.add(expectedGame);
@@ -86,7 +89,7 @@ public class JoinGameServiceTests {
         UserData secondUser = new UserData("john","keyboard","john@email.com");
         String secondAuthToken = authDataAccess.createAuth(secondUser.username());
 
-        Assertions.assertThrows(RuntimeException.class, () ->
+        Assertions.assertThrows(AlreadyTakenResult.class, () ->
                 joinGameService.joinGame(secondAuthToken,"white",gameID));
 
     }
@@ -97,7 +100,7 @@ public class JoinGameServiceTests {
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         String authToken = authDataAccess.createAuth(newUser.username());
 
-        int gameID = createGameService.createGame(authToken,"validGame");
+        int gameID = createGameService.createGame("validGame",authToken);
 
         GameData expectedGame = new GameData(gameID,null,"reg23","validGame",new ChessGame());
         expectedGames.add(expectedGame);
@@ -110,7 +113,7 @@ public class JoinGameServiceTests {
         UserData secondUser = new UserData("john","keyboard","john@email.com");
         String secondAuthToken = authDataAccess.createAuth(secondUser.username());
 
-        Assertions.assertThrows(RuntimeException.class, () ->
+        Assertions.assertThrows(AlreadyTakenResult.class, () ->
                 joinGameService.joinGame(secondAuthToken,"black",gameID));
     }
 
@@ -120,9 +123,9 @@ public class JoinGameServiceTests {
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         String authToken = authDataAccess.createAuth(newUser.username());
 
-        int gameID = createGameService.createGame(authToken,"validGame");
+        int gameID = createGameService.createGame("validGame",authToken);
 
-        Assertions.assertThrows(RuntimeException.class, () ->
+        Assertions.assertThrows(UnauthorizedResult.class, () ->
                 joinGameService.joinGame("wrongToken","white",gameID));
 
     }
@@ -133,7 +136,7 @@ public class JoinGameServiceTests {
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         String authToken = authDataAccess.createAuth(newUser.username());
 
-        Assertions.assertThrows(RuntimeException.class, () ->
+        Assertions.assertThrows(DataAccessException.class, () ->
                 joinGameService.joinGame(authToken,"white",123456));
 
     }

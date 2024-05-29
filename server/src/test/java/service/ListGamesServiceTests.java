@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import result.UnauthorizedResult;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -77,6 +78,6 @@ public class ListGamesServiceTests {
     @Test
     @DisplayName("Not Authorized")
     public void notAuthorized() throws Exception{
-        Assertions.assertThrows(RuntimeException.class,() -> listGamesService.listGames("unauthorizedToken"));
+        Assertions.assertThrows(UnauthorizedResult.class,() -> listGamesService.listGames("unauthorizedToken"));
     }
 }

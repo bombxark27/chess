@@ -60,8 +60,8 @@ public class Server {
 
         Spark.get("/game", (request, response) -> {
             Collection<GameData> games = listGamesService.listGames(request.headers("Authorization"));
-            response.status(200);
-            return serializer.toJson(games);
+            ListGamesResult listGamesResult = new ListGamesResult(games);
+            return serializer.toJson(listGamesResult);
         });
 
         Spark.post("/game", (request,response) -> {
@@ -76,8 +76,8 @@ public class Server {
 
         Spark.put("/game", (request,response) -> {
             String authToken = request.headers("Authorization");
-            serializer.fromJson(request.body(),String.class);
-//            joinGameService.joinGame(authToken,);
+            JoinGameRequest joinGameRequest = serializer.fromJson(request.body(), JoinGameRequest.class);
+            joinGameService.joinGame(authToken, joinGameRequest.playerColor(), joinGameRequest.gameID());
 
             response.status(200);
             return "{}";
