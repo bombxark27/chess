@@ -1,9 +1,14 @@
 package server;
 
 import com.google.gson.Gson;
+import dataaccess.DataAccessException;
 import model.AuthData;
 import model.GameData;
 import model.UserData;
+import request.CreateGameRequest;
+import request.JoinGameRequest;
+import result.CreateGameResult;
+import result.ListGamesResult;
 import service.*;
 import spark.*;
 
@@ -27,39 +32,58 @@ public class Server {
         // Register your endpoints and handle exceptions here.
         Spark.delete("/db", (request, response) -> {
             clearService.clearDatabase();
+            response.status(200);
             return "{}";
         });
 
         Spark.post("/user", (request, response) -> {
             AuthData authData = registerService.register(serializer.fromJson(request.body(), UserData.class));
+            response.status(200);
             return serializer.toJson(authData);
         });
 
         Spark.post("/session" , (request,response) -> {
-            AuthData authData = loginService.login(serializer.fromJson(request.body(), UserData.class));
+            UserData userData = serializer.fromJson(request.body(), UserData.class);
+            AuthData authData = loginService.login(userData);
+//            response.status(200);
             return serializer.toJson(authData);
         });
 
         Spark.delete("/session", (request,response) -> {
             logoutService.logout(request.headers("Authorization"));
+
+            response.status(200);
             return "{}";
         });
 
         Spark.get("/game", (request, response) -> {
             Collection<GameData> games = listGamesService.listGames(request.headers("Authorization"));
+
+            response.status(200);
             return serializer.toJson(games);
         });
 
         Spark.post("/game", (request,response) -> {
             int gameID = createGameService.createGame(serializer.fromJson(request.body(),String.class),request.headers("Authorization"));
+
+            response.status(200);
             return serializer.toJson(gameID);
         });
 
         Spark.put("/game", (request,response) -> {
             String authToken = request.headers("Authorization");
             serializer.fromJson(request.body(),String.class);
+//            joinGameService.joinGame(authToken,);
 
+            response.status(200);
             return "{}";
+        });
+
+
+        Spark.exception(DataAccessException.class, (exception, request, response) -> {
+            // Handle the exception here
+            response.status(400);
+            response.body(serializer.toJson("Error: bad request"));
         });
 
         Spark.awaitInitialization();
