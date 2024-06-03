@@ -3,6 +3,7 @@ package dataaccess;
 import model.AuthData;
 
 import java.util.HashMap;
+import java.sql.*;
 
 public class SQLAuthDAO implements AuthDAO{
 

@@ -9,6 +9,31 @@ public class DatabaseManager {
     private static final String PASSWORD;
     private static final String CONNECTION_URL;
 
+
+    private static final String USER_TABLE = """
+            CREATE TABLE IF NOT EXISTS users(
+            'username' VARCHAR(50) PRIMARY KEY,
+            'password' VARCHAR(50) NOT NULL,
+            'email' VARCHAR(50) NOT NULL
+            );
+            """;
+
+    private static final String AUTH_TABLE = """
+            CREATE TABLE IF NOT EXISTS auth(
+            'username' VARCHAR(50) PRIMARY KEY,
+            'authToken' VARCHAR(50) NOT NULL
+            );
+            """;
+
+    private static final String GAME_TABLE = """
+            CREATE TABLE IF NOT EXISTS game(
+            gameID INT NOT NULL AUTOINCREMENT PRIMARY KEY,
+            'whiteUsername' VARCHAR(50),
+            'blackUsername' VARCHAR(50),
+            'gameName' VARCHAR(50) NOT NULL,
+            'chessGame' JSON NOT NULL,
+            );
+            """;
     /*
      * Load the database information for the db.properties file.
      */

@@ -4,6 +4,7 @@ import model.UserData;
 
 import java.util.Collection;
 import java.util.List;
+import java.sql.*;
 
 public class SQLUserDAO implements UserDAO{
 
