@@ -12,7 +12,24 @@ public class SQLUserDAO implements UserDAO{
 
     @Override
     public void insertUser(UserData data) throws DataAccessException {
-        var statement = "INSERT INTO user (username, password, email) VALUES (?, ?, ?);";
+        try (var conn = DatabaseManager.getConnection()){
+            var statement = "INSERT INTO user (username, password, email) VALUES (?, ?, ?)";
+            try (var preparedStatement = conn.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS)){
+                preparedStatement.setString(1,data.username());
+                preparedStatement.setString(2,data.password());
+                preparedStatement.setString(3,data.email());
+                preparedStatement.executeUpdate();
+                var resultSet = preparedStatement.getGeneratedKeys();
+                if(resultSet.next()){
+
+                }
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+
 
 
     }

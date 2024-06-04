@@ -92,6 +92,7 @@ public class DatabaseManager {
                         preparedStatement.setNull(i + 1, Types.NULL);
                     }
                 }
+
                 var rs = preparedStatement.executeQuery();
                 rs.next();
                 System.out.println(rs.getInt(1));
