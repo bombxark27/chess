@@ -11,7 +11,7 @@ public class DatabaseManager {
 
 
     private static final String USER_TABLE = """
-            CREATE TABLE IF NOT EXISTS users(
+            CREATE TABLE IF NOT EXISTS user(
             'username' VARCHAR(50) PRIMARY KEY,
             'password' VARCHAR(50) NOT NULL,
             'email' VARCHAR(50) NOT NULL
