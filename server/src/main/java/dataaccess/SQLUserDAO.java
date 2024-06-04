@@ -13,13 +13,26 @@ public class SQLUserDAO implements UserDAO{
     @Override
     public void insertUser(UserData data) throws DataAccessException {
         var statement = "INSERT INTO user (username, password, email) VALUES (?, ?, ?);";
-        var json = new Gson().toJson(data);
 
 
     }
 
     @Override
     public UserData getUser(String username, String password) throws DataAccessException {
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT * FROM user WHERE username = ? AND password = ?";
+            try (var ps = conn.prepareStatement(statement)) {
+                ps.setString(1, username);
+                ps.setString(2, password);
+                try (var rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        return new UserData(rs.getString("username"), rs.getString("password"), rs.getString("email"));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return null;
     }
 
@@ -30,20 +43,12 @@ public class SQLUserDAO implements UserDAO{
 
     @Override
     public void clearUser() {
-        var statement = "DELETE FROM user";
+        var statement = "TRUNCATE TABLE user";
 //        executeUpdate(statement);
     }
 
 
 
     
-    public void executeUpdate(String statement) throws Exception {
-        try (var conn = DatabaseManager.getConnection()) {
-            try (var preparedStatement = conn.prepareStatement(statement)) {
-                var rs = preparedStatement.executeQuery();
-                rs.next();
-                System.out.println(rs.getInt(1));
-            }
-        }
-    }
+
 }

@@ -1,5 +1,7 @@
 package dataaccess;
 
+import chess.ChessGame;
+
 import java.sql.*;
 import java.util.Properties;
 
@@ -68,6 +70,32 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             throw new DataAccessException(e.getMessage());
+        }
+    }
+
+
+    public void executeUpdate(String statement, Object... params) throws Exception {
+        try (var conn = DatabaseManager.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS)) {
+                for (int i = 0; i < params.length; i++) {
+                    var param = params[i];
+                    if (param instanceof String p) {
+                        preparedStatement.setString(i + 1, p);
+                    }
+                    else if (param instanceof Integer p) {
+                        preparedStatement.setInt(i + 1, p);
+                    }
+                    else if (param instanceof ChessGame p) {
+                        preparedStatement.setString(i + 1, p.toString());
+                    }
+                    else if (param == null){
+                        preparedStatement.setNull(i + 1, Types.NULL);
+                    }
+                }
+                var rs = preparedStatement.executeQuery();
+                rs.next();
+                System.out.println(rs.getInt(1));
+            }
         }
     }
 
