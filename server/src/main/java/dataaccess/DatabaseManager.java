@@ -14,26 +14,26 @@ public class DatabaseManager {
 
     private static final String USER_TABLE = """
             CREATE TABLE IF NOT EXISTS user(
-            'username' VARCHAR(50) PRIMARY KEY,
-            'password' VARCHAR(50) NOT NULL,
-            'email' VARCHAR(50) NOT NULL
+            username VARCHAR(50) PRIMARY KEY,
+            password VARCHAR(50) NOT NULL,
+            email VARCHAR(50) NOT NULL
             );
             """;
 
     private static final String AUTH_TABLE = """
             CREATE TABLE IF NOT EXISTS auth(
-            'username' VARCHAR(50) PRIMARY KEY,
-            'authToken' VARCHAR(50) NOT NULL
+            username VARCHAR(50) PRIMARY KEY,
+            authToken VARCHAR(50) NOT NULL
             );
             """;
 
     private static final String GAME_TABLE = """
             CREATE TABLE IF NOT EXISTS game(
-            gameID INT NOT NULL AUTOINCREMENT PRIMARY KEY,
-            'whiteUsername' VARCHAR(50),
-            'blackUsername' VARCHAR(50),
-            'gameName' VARCHAR(50) NOT NULL,
-            'chessGame' JSON NOT NULL,
+            gameID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            whiteUsername VARCHAR(50),
+            blackUsername VARCHAR(50),
+            gameName VARCHAR(50) NOT NULL,
+            chessGame JSON NOT NULL
             );
             """;
 
@@ -71,8 +71,11 @@ public class DatabaseManager {
             try (var preparedStatement = conn.prepareStatement(statement)) {
                 preparedStatement.executeUpdate();
             }
+            conn.close();
+            var connection = DriverManager.getConnection(CONNECTION_URL, USER, PASSWORD);
+            connection.setCatalog(DATABASE_NAME);
             for (var table : TABLES) {
-                try (var preparedStatement = conn.prepareStatement(table)){
+                try (var preparedStatement = connection.prepareStatement(table)){
                     preparedStatement.executeUpdate();
                 }
             }
@@ -102,8 +105,9 @@ public class DatabaseManager {
                 }
                 preparedStatement.executeUpdate();
                 var rs = preparedStatement.getGeneratedKeys();
-                rs.next();
-                System.out.println(rs.getInt(1));
+//                if (rs.next()) {
+//                    System.out.println(rs.getInt(1));
+//                }
             }
         } catch (SQLException e){
             throw new DataAccessException(e.getMessage());
@@ -123,6 +127,7 @@ public class DatabaseManager {
      * </code>
      */
     static Connection getConnection() throws DataAccessException {
+//        createDatabase();
         try {
             var conn = DriverManager.getConnection(CONNECTION_URL, USER, PASSWORD);
             conn.setCatalog(DATABASE_NAME);

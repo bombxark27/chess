@@ -3,11 +3,9 @@ package dataaccess;
 import chess.ChessGame;
 import com.google.gson.Gson;
 import model.GameData;
-import dataaccess.MemoryGameDAO;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.sql.*;
 
 import static dataaccess.DatabaseManager.executeUpdate;
@@ -49,7 +47,8 @@ public class SQLGameDAO implements GameDAO{
     public void updateGame(String authToken, String playerColor, int gameID) throws Exception {
         var statement = "UPDATE game SET gameID = ?, whiteUsername = ?, blackUsername = ?, gameName = ?," +
                 " chessGame = ? WHERE gameID = ?";
-        GameData data = MemoryGameDAO.getGameForSQL(gameID);
+        MemoryGameDAO gameDataAccess = new MemoryGameDAO();
+        GameData data = gameDataAccess.getGameForSQL(gameID);
         var json = new Gson().toJson(data.game());
         executeUpdate(statement,gameID,data.whiteUsername(),data.blackUsername(),data.gameName(),json);
 
@@ -75,7 +74,8 @@ public class SQLGameDAO implements GameDAO{
 
     @Override
     public void clearGame() throws Exception {
-        var statement = "TRUNCATE TABLE games";
+//        var statement = "TRUNCATE TABLE game";
+        var statement = "DELETE FROM game";
         executeUpdate(statement);
     }
 

@@ -64,7 +64,8 @@ public class SQLUserDAO implements UserDAO{
 
     @Override
     public void clearUser() throws Exception {
-        var statement = "TRUNCATE TABLE user";
+//        var statement = "TRUNCATE TABLE user";
+        var statement = "DELETE FROM user";
         executeUpdate(statement);
     }
 

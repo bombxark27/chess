@@ -48,7 +48,7 @@ public class MemoryGameDAO implements GameDAO{
         throw new DataAccessException("Game does not exist");
     }
 
-    public static GameData getGameForSQL(int gameID) throws DataAccessException{
+    public GameData getGameForSQL(int gameID) throws DataAccessException{
         return this.getGame(gameID);
     }
 
