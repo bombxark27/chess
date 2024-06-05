@@ -7,10 +7,15 @@ import java.util.Collection;
 import java.util.List;
 import java.sql.*;
 
+import static dataaccess.DatabaseManager.createDatabase;
 import static dataaccess.DatabaseManager.executeUpdate;
 
 public class SQLUserDAO implements UserDAO{
 
+
+    public SQLUserDAO() throws Exception{
+        createDatabase();
+    }
 
     @Override
     public void insertUser(UserData data) throws Exception {

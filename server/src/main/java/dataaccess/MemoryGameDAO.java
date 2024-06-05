@@ -48,6 +48,10 @@ public class MemoryGameDAO implements GameDAO{
         throw new DataAccessException("Game does not exist");
     }
 
+    public static GameData getGameForSQL(int gameID) throws DataAccessException{
+        return this.getGame(gameID);
+    }
+
     @Override
     public void updateGame(String authToken, String playerColor, int gameID) throws DataAccessException{
         boolean updated = false;

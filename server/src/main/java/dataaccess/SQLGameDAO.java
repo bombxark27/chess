@@ -1,8 +1,11 @@
 package dataaccess;
 
+import chess.ChessGame;
 import com.google.gson.Gson;
 import model.GameData;
+import dataaccess.MemoryGameDAO;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.sql.*;
@@ -32,7 +35,7 @@ public class SQLGameDAO implements GameDAO{
                 preparedStatement.setInt(1, gameID);
                 try (var resultSet = preparedStatement.executeQuery()) {
                     if (resultSet.next()) {
-
+                        return readGame(resultSet);
                     }
                 }
             }
@@ -43,18 +46,47 @@ public class SQLGameDAO implements GameDAO{
     }
 
     @Override
-    public void updateGame(String authToken, String playerColor, int gameID) throws DataAccessException {
-        var statement = "UPDATE game ";
+    public void updateGame(String authToken, String playerColor, int gameID) throws Exception {
+        var statement = "UPDATE game SET gameID = ?, whiteUsername = ?, blackUsername = ?, gameName = ?," +
+                " chessGame = ? WHERE gameID = ?";
+        GameData data = MemoryGameDAO.getGameForSQL(gameID);
+        var json = new Gson().toJson(data.game());
+        executeUpdate(statement,gameID,data.whiteUsername(),data.blackUsername(),data.gameName(),json);
+
     }
 
     @Override
     public Collection<GameData> listGames() {
-        return List.of();
+        Collection<GameData> result = new ArrayList<>();
+        try (var conn = DatabaseManager.getConnection()){
+            var statement = "SELECT * FROM game";
+            try (var preparedStatement = conn.prepareStatement(statement)) {
+                try (var resultSet = preparedStatement.executeQuery()) {
+                    while (resultSet.next()) {
+                        result.add(readGame(resultSet));
+                    }
+                }
+            }
+        } catch (Exception e){
+            throw new RuntimeException();
+        }
+        return result;
     }
 
     @Override
     public void clearGame() throws Exception {
         var statement = "TRUNCATE TABLE games";
         executeUpdate(statement);
+    }
+
+
+    private GameData readGame(ResultSet rs) throws SQLException {
+        var gameID = rs.getInt("gameID");
+        var whiteUsername = rs.getString("whiteUsername");
+        var blackUsername = rs.getString("blackUsername");
+        var gameName = rs.getString("gameName");
+//        var json = rs.getString("chessGame");
+        var chessGame = new Gson().fromJson(rs.getString("chessGame"), ChessGame.class);
+        return new GameData(gameID,whiteUsername,blackUsername,gameName,chessGame);
     }
 }

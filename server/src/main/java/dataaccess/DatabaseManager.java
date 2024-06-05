@@ -36,6 +36,9 @@ public class DatabaseManager {
             'chessGame' JSON NOT NULL,
             );
             """;
+
+    private static final String[] TABLES = {USER_TABLE, AUTH_TABLE, GAME_TABLE};
+
     /*
      * Load the database information for the db.properties file.
      */
@@ -67,6 +70,11 @@ public class DatabaseManager {
             var conn = DriverManager.getConnection(CONNECTION_URL, USER, PASSWORD);
             try (var preparedStatement = conn.prepareStatement(statement)) {
                 preparedStatement.executeUpdate();
+            }
+            for (var table : TABLES) {
+                try (var preparedStatement = conn.prepareStatement(table)){
+                    preparedStatement.executeUpdate();
+                }
             }
         } catch (SQLException e) {
             throw new DataAccessException(e.getMessage());
