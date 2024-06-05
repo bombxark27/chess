@@ -55,6 +55,9 @@ public class SQLTestsDAO {
         sqlGameDAO.clearGame();
         sqlUserDAO.clearUser();
 
+        Assertions.assertEquals(new HashMap<String,AuthData>(),sqlAuthDAO.authDataInDatabase());
+        Assertions.assertEquals(new ArrayList<UserData>(),sqlUserDAO.usersInDatabase());
+
     }
 
 
@@ -64,7 +67,6 @@ public class SQLTestsDAO {
         UserData user = new UserData("admin", "admin", "admin");
         sqlUserDAO.insertUser(user);
         UserData selectedUser = sqlUserDAO.getUser(user.username(),user.password());
-
         Assertions.assertEquals(user,selectedUser);
     }
 
@@ -101,6 +103,55 @@ public class SQLTestsDAO {
         Assertions.assertEquals(expected,actual);
     }
 
+
+    @Test
+    @DisplayName("Insert Auth")
+    public void insertAuthTest() throws Exception {
+        AuthData auth = new AuthData("admin", "admin");
+        sqlAuthDAO.insertAuth(auth);
+        AuthData selectedAuth = sqlAuthDAO.getAuth("admin");
+        Assertions.assertEquals(auth,selectedAuth);
+    }
+
+    @Test
+    @DisplayName("Insert Bad Auth")
+    public void insertBadAuthTest() throws Exception {
+        AuthData auth = new AuthData("admin", "admin");
+        sqlAuthDAO.insertAuth(auth);
+        Assertions.assertThrows(DataAccessException.class, () -> sqlAuthDAO.insertAuth(auth));
+    }
+
+    @Test
+    @DisplayName("Auth In Database")
+    public void authInDatabaseTest() throws Exception {
+        HashMap<String,AuthData> expected = new HashMap<>();
+        AuthData auth = new AuthData("admin", "admin");
+        AuthData auth2 = new AuthData("admin2", "admin2");
+        AuthData auth3 = new AuthData("admin3", "admin3");
+        expected.put("admin",auth);
+        expected.put("admin2",auth2);
+        expected.put("admin3",auth3);
+        sqlAuthDAO.insertAuth(auth);
+        sqlAuthDAO.insertAuth(auth2);
+        sqlAuthDAO.insertAuth(auth3);
+        HashMap<String,AuthData> actual = sqlAuthDAO.authDataInDatabase();
+        Assertions.assertEquals(expected,actual);
+
+    }
+
+    @Test
+    @DisplayName("Delete One Auth")
+    public void deleteAuthTest() throws Exception {
+        HashMap<String,AuthData> expected = new HashMap<>();
+        AuthData auth = new AuthData("admin", "admin");
+        AuthData auth2 = new AuthData("admin2", "admin2");
+        expected.put("admin",auth);
+        sqlAuthDAO.insertAuth(auth);
+        sqlAuthDAO.insertAuth(auth2);
+        sqlAuthDAO.deleteAuth("admin2");
+        HashMap<String,AuthData> actual = sqlAuthDAO.authDataInDatabase();
+        Assertions.assertEquals(expected,actual);
+    }
 
 
 }

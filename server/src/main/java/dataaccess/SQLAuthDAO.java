@@ -2,6 +2,8 @@ package dataaccess;
 
 import model.AuthData;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.sql.*;
 
@@ -12,8 +14,7 @@ public class SQLAuthDAO implements AuthDAO{
 
     @Override
     public String createAuth(String username) {
-        var statement = "INSERT INTO auth (username, authToken) VALUES (?, ?)";
-        return "";
+        return null;
     }
 
     public AuthData insertAuth(AuthData data) throws Exception {
@@ -49,7 +50,24 @@ public class SQLAuthDAO implements AuthDAO{
 
     @Override
     public HashMap<String, AuthData> authDataInDatabase() {
-        return null;
+        Collection<AuthData> result = new ArrayList<>();
+        try (var conn = DatabaseManager.getConnection()){
+            var statement = "SELECT * FROM auth";
+            try (var preparedStatement = conn.prepareStatement(statement)){
+                try (var resultSet = preparedStatement.executeQuery()){
+                    while (resultSet.next()){
+                        result.add(new AuthData(resultSet.getString("username"), resultSet.getString("authToken")));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        HashMap<String, AuthData> authData = new HashMap<>();
+        for (AuthData data : result){
+            authData.put(data.authToken(), data);
+        }
+        return authData;
     }
 
     @Override
