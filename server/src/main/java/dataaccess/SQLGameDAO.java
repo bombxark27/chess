@@ -74,8 +74,8 @@ public class SQLGameDAO implements GameDAO{
 
     @Override
     public void clearGame() throws Exception {
-//        var statement = "TRUNCATE TABLE game";
-        var statement = "DELETE FROM game";
+        var statement = "TRUNCATE TABLE game";
+//        var statement = "DELETE FROM game";
         executeUpdate(statement);
     }
 

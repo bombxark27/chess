@@ -51,7 +51,9 @@ public class SQLTestsDAO {
         sqlGameDAO.insertGame(game);
         sqlUserDAO.insertUser(user);
 
-
+        sqlAuthDAO.clearAuth();
+        sqlGameDAO.clearGame();
+        sqlUserDAO.clearUser();
 
     }
 }
