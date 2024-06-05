@@ -56,4 +56,51 @@ public class SQLTestsDAO {
         sqlUserDAO.clearUser();
 
     }
+
+
+    @Test
+    @DisplayName("Insert User")
+    public void insertUserTest() throws Exception {
+        UserData user = new UserData("admin", "admin", "admin");
+        sqlUserDAO.insertUser(user);
+        UserData selectedUser = sqlUserDAO.getUser(user.username(),user.password());
+
+        Assertions.assertEquals(user,selectedUser);
+    }
+
+    @Test
+    @DisplayName("Insert Bad User")
+    public void insertBadUserTest() throws Exception {
+        UserData user = new UserData("admin", "admin", "admin");
+        sqlUserDAO.insertUser(user);
+        Assertions.assertThrows(DataAccessException.class, () -> sqlUserDAO.insertUser(user));
+    }
+
+    @Test
+    @DisplayName("List Users")
+    public void listUsersTest() throws Exception {
+        UserData user = new UserData("admin", "admin", "admin");
+        UserData user2 = new UserData("admin2", "admin2", "admin2");
+        UserData user3 = new UserData("admin3", "admin3", "admin3");
+        UserData user4 = new UserData("admin4", "admin4", "admin4");
+        UserData user5 = new UserData("admin5", "admin5", "admin5");
+        Collection<UserData> expected = new ArrayList<>();
+        expected.add(user);
+        expected.add(user2);
+        expected.add(user3);
+        expected.add(user4);
+        expected.add(user5);
+        sqlUserDAO.insertUser(user);
+        sqlUserDAO.insertUser(user2);
+        sqlUserDAO.insertUser(user3);
+        sqlUserDAO.insertUser(user4);
+        sqlUserDAO.insertUser(user5);
+
+        Collection<UserData> actual = sqlUserDAO.usersInDatabase();
+
+        Assertions.assertEquals(expected,actual);
+    }
+
+
+
 }
