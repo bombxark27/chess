@@ -1,6 +1,7 @@
 package dataaccess;
 
 import chess.ChessGame;
+import com.google.gson.Gson;
 
 import java.sql.*;
 import java.util.Properties;
@@ -86,6 +87,7 @@ public class DatabaseManager {
 
 
     public static void executeUpdate(String statement, Object... params) throws Exception {
+        Gson gson = new Gson();
         try (var conn = DatabaseManager.getConnection()) {
             try (var preparedStatement = conn.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS)) {
                 for (int i = 0; i < params.length; i++) {
@@ -97,7 +99,7 @@ public class DatabaseManager {
                         preparedStatement.setInt(i + 1, p);
                     }
                     else if (param instanceof ChessGame p) {
-                        preparedStatement.setString(i + 1, p.toString());
+                        preparedStatement.setString(i + 1, gson.toJson(p));
                     }
                     else if (param == null){
                         preparedStatement.setNull(i + 1, Types.NULL);
@@ -105,9 +107,9 @@ public class DatabaseManager {
                 }
                 preparedStatement.executeUpdate();
                 var rs = preparedStatement.getGeneratedKeys();
-//                if (rs.next()) {
-//                    System.out.println(rs.getInt(1));
-//                }
+                if (rs.next()) {
+                    return;
+                }
             }
         } catch (SQLException e){
             throw new DataAccessException(e.getMessage());

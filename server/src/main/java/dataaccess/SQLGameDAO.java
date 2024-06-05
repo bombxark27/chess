@@ -2,6 +2,7 @@ package dataaccess;
 
 import chess.ChessGame;
 import com.google.gson.Gson;
+import model.AuthData;
 import model.GameData;
 
 import java.util.ArrayList;
@@ -45,12 +46,21 @@ public class SQLGameDAO implements GameDAO{
 
     @Override
     public void updateGame(String authToken, String playerColor, int gameID) throws Exception {
-        var statement = "UPDATE game SET gameID = ?, whiteUsername = ?, blackUsername = ?, gameName = ?," +
-                " chessGame = ? WHERE gameID = ?";
-        MemoryGameDAO gameDataAccess = new MemoryGameDAO();
-        GameData data = gameDataAccess.getGameForSQL(gameID);
-        var json = new Gson().toJson(data.game());
-        executeUpdate(statement,gameID,data.whiteUsername(),data.blackUsername(),data.gameName(),json);
+        var statement = "UPDATE game SET whiteUsername = ?, blackUsername = ?, chessGame = ? " +
+                "WHERE gameID = ?";
+
+        GameData data = getGame(gameID);
+        SQLAuthDAO authDAO = new SQLAuthDAO();
+        AuthData authData = authDAO.getAuth(authToken);
+        if (playerColor.equalsIgnoreCase("white") && data.whiteUsername() == null) {
+            executeUpdate(statement, authData.username(), data.blackUsername(), data.game(), gameID);
+        }
+        else if (playerColor.equalsIgnoreCase("black") && data.blackUsername() == null) {
+            executeUpdate(statement, data.blackUsername(), authData.username(), data.game(), gameID);
+        }
+        else{
+            throw new DataAccessException("Invalid player color or Player taken");
+        }
 
     }
 

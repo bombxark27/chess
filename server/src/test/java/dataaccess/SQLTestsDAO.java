@@ -153,5 +153,78 @@ public class SQLTestsDAO {
         Assertions.assertEquals(expected,actual);
     }
 
+    @Test
+    @DisplayName("Insert Game")
+    public void insertGameTest() throws Exception {
+        GameData game = new GameData(5,"admin","admin","admin",new ChessGame());
+        sqlGameDAO.insertGame(game);
+        GameData actual = sqlGameDAO.getGame(game.gameID());
+        Assertions.assertEquals(game,actual);
+    }
 
+    @Test
+    @DisplayName("Insert Bad Game")
+    public void insertBadGameTest() throws Exception {
+        GameData game = new GameData(5,"admin","admin","admin",new ChessGame());
+        sqlGameDAO.insertGame(game);
+        Assertions.assertThrows(DataAccessException.class, () -> sqlGameDAO.insertGame(game));
+    }
+
+    @Test
+    @DisplayName("Insert Same GameID")
+    public void insertSameGameIDTest() throws Exception {
+        GameData game = new GameData(5,"admin","admin","admin",new ChessGame());
+        GameData badGame = new GameData(5,"admin2","admin2","admin2",new ChessGame());
+        sqlGameDAO.insertGame(game);
+        Assertions.assertThrows(DataAccessException.class, () -> sqlGameDAO.insertGame(badGame));
+    }
+
+    @Test
+    @DisplayName("List Games")
+    public void listGamesTest() throws Exception {
+        Collection<GameData> expected = new ArrayList<>();
+        GameData game = new GameData(1,"admin","admin","admin",new ChessGame());
+        GameData game2 = new GameData(2,"admin2","admin2","admin2",new ChessGame());
+        GameData game3 = new GameData(3,"admin3","admin3","admin3",new ChessGame());
+        expected.add(game);
+        expected.add(game2);
+        expected.add(game3);
+        sqlGameDAO.insertGame(game);
+        sqlGameDAO.insertGame(game2);
+        sqlGameDAO.insertGame(game3);
+        Collection<GameData> actual = sqlGameDAO.listGames();
+        Assertions.assertEquals(expected,actual);
+
+    }
+
+    @Test
+    @DisplayName("Join Game")
+    public void joinGameTest() throws Exception {
+        AuthData authData = new AuthData("admin", "admin");
+        sqlAuthDAO.insertAuth(authData);
+        GameData game = new GameData(5,null,null,"admin",new ChessGame());
+        GameData expected = new GameData(5,"admin",null,"admin",new ChessGame());
+        sqlGameDAO.insertGame(game);
+        sqlGameDAO.updateGame(authData.authToken(),"white",game.gameID());
+        GameData actual = sqlGameDAO.getGame(5);
+        Assertions.assertEquals(expected,actual);
+
+    }
+
+    @Test
+    @DisplayName("Invalid Join")
+    public void invalidJoinTest() throws Exception {
+        AuthData authData = new AuthData("admin", "admin");
+        AuthData badAuthData = new AuthData("fail", "fail");
+        sqlAuthDAO.insertAuth(authData);
+        sqlAuthDAO.insertAuth(badAuthData);
+        GameData game = new GameData(5,null,null,"admin",new ChessGame());
+        GameData bad = new GameData(5,"fail",null,"admin",new ChessGame());
+        sqlGameDAO.insertGame(game);
+        sqlGameDAO.updateGame(authData.authToken(),"white",game.gameID());
+
+        Assertions.assertThrows(DataAccessException.class, () -> sqlGameDAO.updateGame(badAuthData.authToken(),
+                "white",bad.gameID()));
+
+    }
 }
