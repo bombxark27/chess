@@ -5,7 +5,6 @@ import model.AuthData;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.sql.*;
 
 import static dataaccess.DatabaseManager.createDatabase;
 import static dataaccess.DatabaseManager.executeUpdate;
@@ -52,7 +51,6 @@ public class SQLAuthDAO implements AuthDAO{
                 }
             }
         } catch (Exception e) {
-//            e.printStackTrace();
             throw new DataAccessException(e.getMessage());
         }
         return null;
@@ -89,7 +87,6 @@ public class SQLAuthDAO implements AuthDAO{
     @Override
     public void clearAuth() throws Exception {
         var statement = "TRUNCATE TABLE auth";
-//        var statement = "DELETE FROM auth";
         executeUpdate(statement);
     }
 }

@@ -13,7 +13,6 @@ public class RegisterService {
     public AuthData register(UserData user) throws Exception{
         MemoryAuthDAO authDataAccess = new MemoryAuthDAO();
         MemoryUserDAO userDataAccess = new MemoryUserDAO();
-        SQLUserDAO sqlUserDataAccess = new SQLUserDAO();
         SQLAuthDAO sqlAuthDataAccess = new SQLAuthDAO();
         String authToken;
         AuthData result;

@@ -2,11 +2,8 @@ package service;
 
 import dataaccess.DataAccessException;
 import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryUserDAO;
 
 import dataaccess.SQLAuthDAO;
-import model.AuthData;
-import model.UserData;
 import result.UnauthorizedResult;
 
 public class LogoutService {
