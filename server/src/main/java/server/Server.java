@@ -29,6 +29,7 @@ public class Server {
     private final RegisterService registerService = new RegisterService();
     private final Gson serializer = new Gson();
 
+
     public int run(int desiredPort) {
         Spark.port(desiredPort);
 

@@ -15,7 +15,22 @@ public class SQLGameDAO implements GameDAO{
 
 
     @Override
-    public GameData createGame(String gameName) throws DataAccessException {
+    public GameData createGame(String gameName) throws Exception {
+        var statement = "INSERT INTO games (gameName, chessGame) VALUES (?,?)";
+        executeUpdate(statement,gameName,new ChessGame());
+        try (var conn = DatabaseManager.getConnection()) {
+            var selectStatement = "SELECT * FROM game WHERE gameName = ?";
+            try (var preparedStatement = conn.prepareStatement(selectStatement)) {
+                preparedStatement.setString(1, gameName);
+                try (var resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        return readGame(resultSet);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new DataAccessException(e.getMessage());
+        }
         return null;
     }
 

@@ -13,7 +13,20 @@ public class SQLAuthDAO implements AuthDAO{
 
 
     @Override
-    public String createAuth(String username) {
+    public String createAuth(String username) throws Exception{
+        try (var conn = DatabaseManager.getConnection()){
+            var statement = "SELECT * FROM auth WHERE username = ?";
+            try (var preparedStatement = conn.prepareStatement(statement)){
+                preparedStatement.setString(1, username);
+                try (var resultSet = preparedStatement.executeQuery()){
+                    if (resultSet.next()){
+                        return resultSet.getString("authToken");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new DataAccessException(e.getMessage());
+        }
         return null;
     }
 
