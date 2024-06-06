@@ -40,7 +40,8 @@ public class SQLGameDAO implements GameDAO{
 
     @Override
     public void insertGame(GameData data) throws Exception {
-        var statement = "INSERT INTO game (gameID, whiteUsername, blackUsername, gameName, chessGame) VALUES (?, ?, ?, ?, ?)";
+        var statement = "INSERT INTO game (gameID, whiteUsername, blackUsername," +
+                " gameName, chessGame) VALUES (?, ?, ?, ?, ?)";
         var json = new Gson().toJson(data.game());
         executeUpdate(statement, data.gameID(),data.whiteUsername(),data.blackUsername(),data.gameName(),json);
     }

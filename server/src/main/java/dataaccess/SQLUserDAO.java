@@ -31,7 +31,8 @@ public class SQLUserDAO implements UserDAO{
                 preparedStatement.setString(1, username);
                 try (var rs = preparedStatement.executeQuery()) {
                     if (rs.next()) {
-                        return new UserData(rs.getString("username"), rs.getString("password"), rs.getString("email"));
+                        return new UserData(rs.getString("username"),
+                                rs.getString("password"), rs.getString("email"));
                     }
                 }
             }
@@ -49,7 +50,8 @@ public class SQLUserDAO implements UserDAO{
             try (var preparedStatement = conn.prepareStatement(statement)) {
                 try (var rs = preparedStatement.executeQuery()) {
                     while (rs.next()) {
-                        result.add(new UserData(rs.getString("username"), rs.getString("password"), rs.getString("email")));
+                        result.add(new UserData(rs.getString("username"),
+                                rs.getString("password"), rs.getString("email")));
                     }
                 }
             }
