@@ -47,9 +47,11 @@ public class LogoutServiceTests {
     @DisplayName("Successful Logout")
     public void testSuccessfulLogout() throws Exception {
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
-        expectedUsers.add(newUser);
+
 
         registerService.register(newUser);
+
+        expectedUsers.add(userDataAccess.getUser("reg23"));
 
         AuthData testLogin = loginService.login(newUser);
 

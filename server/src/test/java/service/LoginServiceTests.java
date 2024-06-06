@@ -37,14 +37,18 @@ public class LoginServiceTests {
     @Test
     @DisplayName("Successful Login")
     public void successfulLogin() throws Exception {
-        UserData expectedUser = new UserData("reg23","password5","reg23@email.com");
+
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         RegisterService registerService = new RegisterService();
 
+        registerService.register(newUser);
+        UserData expectedUser = userMemory.getUser("reg23");
         expectedUserDatabase.add(expectedUser);
 
-        registerService.register(newUser);
-        loginService.login(expectedUser);
+        UserData loginUser = new UserData("reg23","password5","reg23@email.com");
+        loginService.login(loginUser);
+
+
 
         Assertions.assertEquals(expectedUserDatabase,userMemory.usersInDatabase());
         Assertions.assertFalse(expectedAuthDatabase.authDataInDatabase().isEmpty());
@@ -58,8 +62,8 @@ public class LoginServiceTests {
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         RegisterService registerService = new RegisterService();
 
-        expectedUserDatabase.add(newUser);
         registerService.register(newUser);
+        expectedUserDatabase.add(userMemory.getUser("reg23"));
 
         Assertions.assertEquals(expectedUserDatabase,userMemory.usersInDatabase());
         Assertions.assertThrows(UnauthorizedResult.class, () -> loginService.login(badUser));
@@ -72,8 +76,8 @@ public class LoginServiceTests {
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         RegisterService registerService = new RegisterService();
 
-        expectedUserDatabase.add(newUser);
         registerService.register(newUser);
+        expectedUserDatabase.add(userMemory.getUser("reg23"));
 
         Assertions.assertEquals(expectedUserDatabase,userMemory.usersInDatabase());
         Assertions.assertThrows(UnauthorizedResult.class, () -> loginService.login(badUser));

@@ -1,10 +1,7 @@
 package dataaccess;
 
 import chess.ChessGame;
-import dataaccess.DataAccessException;
-import dataaccess.SQLAuthDAO;
-import dataaccess.SQLGameDAO;
-import dataaccess.SQLUserDAO;
+import dataaccess.*;
 import model.AuthData;
 import model.GameData;
 import model.UserData;
@@ -66,7 +63,7 @@ public class SQLTestsDAO {
     public void insertUserTest() throws Exception {
         UserData user = new UserData("admin", "admin", "admin");
         sqlUserDAO.insertUser(user);
-        UserData selectedUser = sqlUserDAO.getUser(user.username(),user.password());
+        UserData selectedUser = sqlUserDAO.getUser(user.username());
         Assertions.assertEquals(user,selectedUser);
     }
 
@@ -200,7 +197,9 @@ public class SQLTestsDAO {
     @Test
     @DisplayName("Join Game")
     public void joinGameTest() throws Exception {
-        AuthData authData = new AuthData("admin", "admin");
+        MemoryAuthDAO memoryAuthDAO = new MemoryAuthDAO();
+        String authToken = memoryAuthDAO.createAuth("admin");
+        AuthData authData = new AuthData("admin", authToken);
         sqlAuthDAO.insertAuth(authData);
         GameData game = new GameData(5,null,null,"admin",new ChessGame());
         GameData expected = new GameData(5,"admin",null,"admin",new ChessGame());
@@ -214,7 +213,9 @@ public class SQLTestsDAO {
     @Test
     @DisplayName("Invalid Join")
     public void invalidJoinTest() throws Exception {
-        AuthData authData = new AuthData("admin", "admin");
+        MemoryAuthDAO memoryAuthDAO = new MemoryAuthDAO();
+        String authToken = memoryAuthDAO.createAuth("admin");
+        AuthData authData = new AuthData("admin", authToken);
         AuthData badAuthData = new AuthData("fail", "fail");
         sqlAuthDAO.insertAuth(authData);
         sqlAuthDAO.insertAuth(badAuthData);

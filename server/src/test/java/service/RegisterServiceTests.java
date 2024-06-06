@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mindrot.jbcrypt.BCrypt;
 import result.AlreadyTakenResult;
 import result.BadRequestResult;
 
@@ -37,16 +38,17 @@ public class RegisterServiceTests {
     @Test
     @DisplayName("Register New User")
     public void registerNewUser() throws Exception {
-        UserData expectedUser = new UserData("reg23","password5","reg23@email.com");
-        UserData newUser = new UserData("reg23","password5","reg23@email.com");
         MemoryUserDAO userDataAccess = new MemoryUserDAO();
         MemoryAuthDAO authDataAccess = new MemoryAuthDAO();
+        UserData newUser = new UserData("reg23","password5","reg23@email.com");
         service.register(newUser);
+        String hashedPassword = BCrypt.hashpw("password5", BCrypt.gensalt());
+        UserData expectedUser = userDataAccess.getUser("reg23");
         expectedUserDAO.add(expectedUser);
 
 
         Assertions.assertEquals(expectedUserDAO,userDataAccess.usersInDatabase());
-        Assertions.assertEquals(expectedUser,userDataAccess.getUser("reg23","password5"));
+        Assertions.assertEquals(expectedUser,userDataAccess.getUser("reg23"));
         Assertions.assertFalse(authDataAccess.authDataInDatabase().isEmpty());
     }
 
@@ -74,7 +76,7 @@ public class RegisterServiceTests {
         UserData newUser = new UserData("reg23","password5","reg23@email.com");
         service.register(newUser);
         MemoryUserDAO otherUserDAO = new MemoryUserDAO();
-        expectedUserDAO.add(newUser);
+        expectedUserDAO.add(otherUserDAO.getUser("reg23"));
 
         Assertions.assertEquals(expectedUserDAO,otherUserDAO.usersInDatabase());
         Assertions.assertFalse(otherUserDAO.usersInDatabase().isEmpty());

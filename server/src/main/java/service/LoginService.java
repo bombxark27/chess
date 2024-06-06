@@ -4,6 +4,7 @@ import dataaccess.*;
 
 import model.AuthData;
 import model.UserData;
+import org.mindrot.jbcrypt.BCrypt;
 import result.UnauthorizedResult;
 
 public class LoginService {
@@ -14,7 +15,10 @@ public class LoginService {
         SQLAuthDAO sqlAuthDataAccess = new SQLAuthDAO();
         AuthData result;
         try {
-            UserData existingUser = userDataAccess.getUser(user.username(), user.password());
+            UserData existingUser = userDataAccess.getUser(user.username());
+            if (!BCrypt.checkpw(user.password(), existingUser.password())){
+                throw new UnauthorizedResult();
+            }
             String authToken = authDataAccess.createAuth(existingUser.username());
             result = authDataAccess.getAuth(authToken);
 //            sqlAuthDataAccess.insertAuth(result);
