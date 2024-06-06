@@ -69,7 +69,7 @@ public class SQLGameDAO implements GameDAO{
                 "WHERE gameID = ?";
 
         GameData data = getGame(gameID);
-        SQLAuthDAO authDAO = new SQLAuthDAO();
+        MemoryAuthDAO authDAO = new MemoryAuthDAO();
         AuthData authData = authDAO.getAuth(authToken);
         if (playerColor.equalsIgnoreCase("white") && data.whiteUsername() == null) {
             executeUpdate(statement, authData.username(), data.blackUsername(), data.game(), gameID);

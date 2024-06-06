@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.sql.*;
+import org.mindrot.jbcrypt.BCrypt;
 
 import static dataaccess.DatabaseManager.createDatabase;
 import static dataaccess.DatabaseManager.executeUpdate;
@@ -20,12 +21,15 @@ public class SQLUserDAO implements UserDAO{
     @Override
     public void insertUser(UserData data) throws Exception {
         var statement = "INSERT INTO user (username, password, email) VALUES (?, ?, ?)";
+//        String hashedPassword = BCrypt.hashpw(data.password(), BCrypt.gensalt());
+//        executeUpdate(statement,data.username(),hashedPassword,data.email());
         executeUpdate(statement,data.username(),data.password(),data.email());
 
     }
 
     @Override
     public UserData getUser(String username, String password) throws DataAccessException {
+        Collection<UserData> users = usersInDatabase();
         try (var conn = DatabaseManager.getConnection()) {
             var statement = "SELECT * FROM user WHERE username = ? AND password = ?";
             try (var preparedStatement = conn.prepareStatement(statement)) {
