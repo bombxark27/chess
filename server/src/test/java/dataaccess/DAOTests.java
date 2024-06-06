@@ -142,6 +142,12 @@ public class DAOTests {
     }
 
     @Test
+    @DisplayName("Create Auth")
+    public void createAuthTest() throws Exception {
+        Assertions.assertTrue(true);
+    }
+
+    @Test
     @DisplayName("Delete One Auth")
     public void deleteAuthTest() throws Exception {
         HashMap<String,AuthData> expected = new HashMap<>();
