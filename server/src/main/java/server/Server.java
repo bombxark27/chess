@@ -66,7 +66,7 @@ public class Server {
         Spark.post("/game", (request,response) -> {
 
             CreateGameRequest createGameRequest = serializer.fromJson(request.body(), CreateGameRequest.class);
-            int gameID = createGameService.createGame(String.valueOf(createGameRequest),request.headers("Authorization"));
+            int gameID = createGameService.createGame(String.valueOf(createGameRequest.gameName()),request.headers("Authorization"));
 
             CreateGameResult createGameResult = new CreateGameResult(gameID);
 

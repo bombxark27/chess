@@ -9,10 +9,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.sql.*;
 
+import static dataaccess.DatabaseManager.createDatabase;
 import static dataaccess.DatabaseManager.executeUpdate;
 
 public class SQLGameDAO implements GameDAO{
 
+    public SQLGameDAO() throws Exception{
+        createDatabase();
+    }
 
     @Override
     public GameData createGame(String gameName) throws Exception {
@@ -71,7 +75,7 @@ public class SQLGameDAO implements GameDAO{
             executeUpdate(statement, authData.username(), data.blackUsername(), data.game(), gameID);
         }
         else if (playerColor.equalsIgnoreCase("black") && data.blackUsername() == null) {
-            executeUpdate(statement, data.blackUsername(), authData.username(), data.game(), gameID);
+            executeUpdate(statement, data.whiteUsername(), authData.username(), data.game(), gameID);
         }
         else{
             throw new DataAccessException("Invalid player color or Player taken");
@@ -110,7 +114,6 @@ public class SQLGameDAO implements GameDAO{
         var whiteUsername = rs.getString("whiteUsername");
         var blackUsername = rs.getString("blackUsername");
         var gameName = rs.getString("gameName");
-//        var json = rs.getString("chessGame");
         var chessGame = new Gson().fromJson(rs.getString("chessGame"), ChessGame.class);
         return new GameData(gameID,whiteUsername,blackUsername,gameName,chessGame);
     }

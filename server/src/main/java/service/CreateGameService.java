@@ -15,6 +15,8 @@ public class CreateGameService {
     public int createGame(String gameName, String authToken) throws Exception{
         MemoryAuthDAO authDataAccess = new MemoryAuthDAO();
         MemoryGameDAO gameDataAccess = new MemoryGameDAO();
+//        SQLAuthDAO authDAO = new SQLAuthDAO();
+        SQLGameDAO gameDAO = new SQLGameDAO();
         int gameID;
         GameData newGame;
 
@@ -25,6 +27,7 @@ public class CreateGameService {
             authDataAccess.getAuth(authToken);
             newGame = gameDataAccess.createGame(gameName);
             gameDataAccess.insertGame(newGame);
+            gameDAO.insertGame(newGame);
             gameID = newGame.gameID();
         } catch (DataAccessException e) {
             throw new BadRequestResult();

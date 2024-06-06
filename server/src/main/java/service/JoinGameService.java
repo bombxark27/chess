@@ -1,10 +1,7 @@
 package service;
 
 import chess.ChessGame;
-import dataaccess.DataAccessException;
-import dataaccess.GameDAO;
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryGameDAO;
+import dataaccess.*;
 import model.GameData;
 import result.AlreadyTakenResult;
 import result.BadRequestResult;
@@ -14,6 +11,7 @@ public class JoinGameService {
     public void joinGame(String authToken, String playerColor, int gameID) throws Exception{
         MemoryAuthDAO authDataAccess = new MemoryAuthDAO();
         MemoryGameDAO gameDataAccess = new MemoryGameDAO();
+        SQLGameDAO gameDAO = new SQLGameDAO();
         ChessGame.TeamColor teamColor;
 
         if (!authDataAccess.authDataInDatabase().containsKey(authToken)) {
@@ -52,6 +50,7 @@ public class JoinGameService {
         try {
             authDataAccess.getAuth(authToken);
             gameDataAccess.updateGame(authToken,playerColor,gameID);
+            gameDAO.updateGame(authToken,playerColor,gameID);
         } catch (DataAccessException e) {
             throw new BadRequestResult();
         }

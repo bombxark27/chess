@@ -7,10 +7,14 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.sql.*;
 
+import static dataaccess.DatabaseManager.createDatabase;
 import static dataaccess.DatabaseManager.executeUpdate;
 
 public class SQLAuthDAO implements AuthDAO{
 
+    public SQLAuthDAO() throws DataAccessException {
+        createDatabase();
+    }
 
     @Override
     public String createAuth(String username) throws Exception{
@@ -30,10 +34,9 @@ public class SQLAuthDAO implements AuthDAO{
         return null;
     }
 
-    public AuthData insertAuth(AuthData data) throws Exception {
+    public void insertAuth(AuthData data) throws Exception {
         var statement = "INSERT INTO auth (username, authToken) VALUES (?, ?)";
         executeUpdate(statement,data.username(),data.authToken());
-        return new AuthData(data.username(),data.authToken());
     }
 
     @Override
