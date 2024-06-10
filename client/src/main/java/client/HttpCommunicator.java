@@ -23,6 +23,14 @@ public class HttpCommunicator {
             http.setRequestMethod(method);
             http.setDoOutput(true);
 
+            if (authToken != null) {
+                writeHeaders(authToken, http);
+            }
+            else {
+                http.addRequestProperty("Content-Type", "application/json");
+            }
+
+            writeBody(request, http);
             http.connect();
 
         } catch (Exception e) {
