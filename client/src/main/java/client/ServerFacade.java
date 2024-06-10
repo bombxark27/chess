@@ -6,11 +6,11 @@ import model.UserData;
 public class ServerFacade {
     private HttpCommunicator httpCommunicator;
 
-    public AuthData register(String username, String password, String email) {
+
+
+    public void register(String username, String password, String email) {
         UserData newUser = new UserData(username, password, email);
 
-
-        return null;
     }
 
     public void login(String username, String password) {
