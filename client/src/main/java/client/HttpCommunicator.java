@@ -32,14 +32,18 @@ public class HttpCommunicator {
                 http.addRequestProperty("Content-Type", "application/json");
             }
 
-            writeBody(request, http);
+            if (method != "GET") {
+                writeBody(request, http);
+            }
+
             http.connect();
+
+            return readBody(http,responseClass);
 
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
 
-        return null;
     }
 
     private void writeBody(Object request, HttpURLConnection http) throws IOException {
@@ -62,7 +66,6 @@ public class HttpCommunicator {
                 response = serializer.fromJson(reader, responseClass);
             }
         }
-
         return response;
     }
 
