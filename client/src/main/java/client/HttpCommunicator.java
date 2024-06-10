@@ -52,4 +52,12 @@ public class HttpCommunicator {
         http.addRequestProperty("Authorization", authToken);
     }
 
+    private <T> T readBody(HttpURLConnection http, Class<T> responseClass) throws IOException {
+        T response = null;
+
+
+
+        return response;
+    }
+
 }
