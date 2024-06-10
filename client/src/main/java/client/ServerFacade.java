@@ -1,11 +1,13 @@
 package client;
 
 import model.AuthData;
+import model.UserData;
 
 public class ServerFacade {
-
+    private HttpCommunicator httpCommunicator;
 
     public AuthData register(String username, String password, String email) {
+        UserData newUser = new UserData(username, password, email);
 
 
         return null;
@@ -16,14 +18,6 @@ public class ServerFacade {
     }
 
     public void logout() {
-
-    }
-
-    public void quit() {
-
-    }
-
-    public void help() {
 
     }
 
