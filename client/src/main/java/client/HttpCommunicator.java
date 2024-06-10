@@ -39,4 +39,9 @@ public class HttpCommunicator {
         }
     }
 
+    private void writeHeaders(String authToken, HttpURLConnection http) throws IOException {
+        http.addRequestProperty("Content-Type", "application/json");
+        http.addRequestProperty("Authorization", authToken);
+    }
+
 }
