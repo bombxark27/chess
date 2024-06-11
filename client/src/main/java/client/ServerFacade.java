@@ -53,7 +53,7 @@ public class ServerFacade {
         httpCommunicator.makeRequest("PUT","/game",joinGameRequest,null,authToken);
     }
 
-    public void observeGame() {
+    public void observeGame(int gameID) {
 
     }
 
