@@ -15,22 +15,26 @@ public class ServerFacade {
     public AuthData register(String username, String password, String email) throws Exception {
         UserData newUser = new UserData(username, password, email);
         AuthData authData = httpCommunicator.makeRequest("POST","/user",newUser, AuthData.class,authToken);
+        authToken = authData.authToken();
         return authData;
     }
 
-    public void login(String username, String password) {
+    public AuthData login(String username, String password) throws Exception {
+        UserData loginUser = new UserData(username,password,null);
+        AuthData authData = httpCommunicator.makeRequest("POST","/session",loginUser, AuthData.class,authToken);
+        authToken = authData.authToken();
+        return authData;
+    }
+
+    public void logout() throws Exception {
+        httpCommunicator.makeRequest("DELETE","/session",null,null,authToken);
+    }
+
+    public void createGame() throws Exception{
 
     }
 
-    public void logout() {
-
-    }
-
-    public void createGame() {
-
-    }
-
-    public void listGames() {
+    public void listGames() throws Exception {
 
     }
 
