@@ -4,7 +4,11 @@ import model.AuthData;
 import model.GameData;
 import model.UserData;
 import request.CreateGameRequest;
+import request.JoinGameRequest;
 import result.CreateGameResult;
+import result.ListGamesResult;
+
+import java.util.Collection;
 
 public class ServerFacade {
     private HttpCommunicator httpCommunicator;
@@ -39,12 +43,14 @@ public class ServerFacade {
         return createGameResult.gameID();
     }
 
-    public void listGames() throws Exception {
-
+    public Collection<GameData> listGames() throws Exception {
+        ListGamesResult listGamesResult = httpCommunicator.makeRequest("GET","/game",null, ListGamesResult.class,authToken);
+        return listGamesResult.games();
     }
 
-    public void playGame() {
-
+    public void playGame(String playerColor, int gameID) throws Exception {
+        JoinGameRequest joinGameRequest = new JoinGameRequest(playerColor,gameID);
+        httpCommunicator.makeRequest("PUT","/game",joinGameRequest,null,authToken);
     }
 
     public void observeGame() {
