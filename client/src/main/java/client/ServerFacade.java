@@ -12,9 +12,10 @@ public class ServerFacade {
         authToken = null;
     }
 
-    public void register(String username, String password, String email) throws Exception {
+    public AuthData register(String username, String password, String email) throws Exception {
         UserData newUser = new UserData(username, password, email);
         AuthData authData = httpCommunicator.makeRequest("POST","/user",newUser, AuthData.class,authToken);
+        return authData;
     }
 
     public void login(String username, String password) {
