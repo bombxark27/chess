@@ -5,12 +5,16 @@ import model.UserData;
 
 public class ServerFacade {
     private HttpCommunicator httpCommunicator;
+    String authToken;
 
+    public ServerFacade(String url) {
+        httpCommunicator = new HttpCommunicator(url);
+        authToken = null;
+    }
 
-
-    public void register(String username, String password, String email) {
+    public void register(String username, String password, String email) throws Exception {
         UserData newUser = new UserData(username, password, email);
-
+        AuthData authData = httpCommunicator.makeRequest("POST","/user",newUser, AuthData.class,authToken);
     }
 
     public void login(String username, String password) {
