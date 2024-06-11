@@ -39,6 +39,7 @@ public class ServerFacadeTests {
     void register() throws Exception {
         var authData = facade.register("player1", "password", "p1@email.com");
         assertTrue(authData.authToken().length() > 10);
+        assertFalse(facade.noAuthorization());
     }
 
     @Test
@@ -88,5 +89,29 @@ public class ServerFacadeTests {
     @DisplayName("Bad Logout")
     void badLogout() throws Exception {
         assertThrows(Exception.class, () -> facade.logout());
+    }
+
+    @Test
+    @DisplayName("Good Create Game")
+    void createGame() throws Exception {
+        var authData = facade.register("player1", "password", "p1@email.com");
+        assertTrue(authData.authToken().length() > 10);
+        var gameID = facade.createGame("game1");
+        assertTrue(gameID > 0);
+    }
+
+    @Test
+    @DisplayName("Bad Create Game")
+    void badCreateGame() throws Exception {
+        var authData = facade.register("player1", "password", "p1@email.com");
+        facade.createGame("game1");
+        assertThrows(Exception.class, () -> facade.createGame("game1"));
+    }
+
+    @Test
+    @DisplayName("Good List Games")
+    void listGames() throws Exception {
+        var authData = facade.register("player1", "password", "p1@email.com");
+
     }
 }
