@@ -58,4 +58,20 @@ public class ServerFacadeTests {
         var loginData = facade.login("player1", "password");
         assertTrue(loginData.authToken().length() > 10);
     }
+
+    @Test
+    @DisplayName("Bad Login: user does not exist")
+    void badLoginUser() throws Exception {
+        var authData = facade.register("player1", "password", "p1@email.com");
+        assertTrue(authData.authToken().length() > 10);
+        assertThrows(Exception.class, () -> facade.login("player2", "password"));
+    }
+
+    @Test
+    @DisplayName("Bad Login: invalid password")
+    void badLoginPassword() throws Exception {
+        var authData = facade.register("player1", "password", "p1@email.com");
+        assertTrue(authData.authToken().length() > 10);
+        assertThrows(Exception.class, () -> facade.login("player1", "wrongpassword"));
+    }
 }
