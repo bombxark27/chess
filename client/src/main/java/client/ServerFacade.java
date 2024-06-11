@@ -1,7 +1,10 @@
 package client;
 
 import model.AuthData;
+import model.GameData;
 import model.UserData;
+import request.CreateGameRequest;
+import result.CreateGameResult;
 
 public class ServerFacade {
     private HttpCommunicator httpCommunicator;
@@ -30,8 +33,10 @@ public class ServerFacade {
         httpCommunicator.makeRequest("DELETE","/session",null,null,authToken);
     }
 
-    public void createGame() throws Exception{
-
+    public int createGame(String gameName) throws Exception{
+        CreateGameRequest createGameRequest = new CreateGameRequest(gameName);
+        CreateGameResult createGameResult = httpCommunicator.makeRequest("POST","/game",createGameRequest, CreateGameResult.class,authToken);
+        return createGameResult.gameID();
     }
 
     public void listGames() throws Exception {
