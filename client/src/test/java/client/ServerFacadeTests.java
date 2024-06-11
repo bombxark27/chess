@@ -3,8 +3,7 @@ package client;
 import org.junit.jupiter.api.*;
 import server.Server;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class ServerFacadeTests {
@@ -73,5 +72,21 @@ public class ServerFacadeTests {
         var authData = facade.register("player1", "password", "p1@email.com");
         assertTrue(authData.authToken().length() > 10);
         assertThrows(Exception.class, () -> facade.login("player1", "wrongpassword"));
+    }
+
+    @Test
+    @DisplayName("Good Logout")
+    void logout() throws Exception {
+        facade.register("player1", "password", "p1@email.com");
+        facade.login("player1", "password");
+        assertFalse(facade.noAuthorization());
+        facade.logout();
+        assertTrue(facade.noAuthorization());
+    }
+
+    @Test
+    @DisplayName("Bad Logout")
+    void badLogout() throws Exception {
+        assertThrows(Exception.class, () -> facade.logout());
     }
 }

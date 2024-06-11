@@ -35,6 +35,11 @@ public class ServerFacade {
 
     public void logout() throws Exception {
         httpCommunicator.makeRequest("DELETE","/session",null,null,authToken);
+        authToken = null;
+    }
+
+    public boolean noAuthorization() {
+        return authToken == null;
     }
 
     public int createGame(String gameName) throws Exception{
