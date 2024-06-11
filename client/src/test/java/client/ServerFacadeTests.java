@@ -135,5 +135,28 @@ public class ServerFacadeTests {
         assertThrows(Exception.class, () -> facade.listGames());
     }
 
+    @Test
+    @DisplayName("Good Play Game")
+    void playGame() throws Exception {
+        facade.register("player1", "password", "p1@email.com");
+        int gameID = facade.createGame("game1");
+        facade.playGame("white",gameID);
+        assertFalse(facade.noAuthorization());
+    }
 
+    @Test
+    @DisplayName("Bad Play Game")
+    void badPlayGame() throws Exception {
+        facade.register("player1", "password", "p1@email.com");
+        assertThrows(Exception.class, () -> facade.playGame("white",0));
+    }
+
+    @Test
+    @DisplayName("Observe Game")
+    void observeGame() throws Exception {
+        facade.register("player1", "password", "p1@email.com");
+        int gameID = facade.createGame("game1");
+        facade.observeGame(gameID);
+        assertTrue(true);
+    }
 }
