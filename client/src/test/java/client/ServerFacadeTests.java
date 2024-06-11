@@ -1,7 +1,11 @@
 package client;
 
+import model.GameData;
 import org.junit.jupiter.api.*;
 import server.Server;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -111,7 +115,25 @@ public class ServerFacadeTests {
     @Test
     @DisplayName("Good List Games")
     void listGames() throws Exception {
-        var authData = facade.register("player1", "password", "p1@email.com");
-
+        facade.register("player1", "password", "p1@email.com");
+        Collection<GameData> games = facade.listGames();
+        assertEquals(new ArrayList<GameData>(), games);
     }
+
+    @Test
+    @DisplayName("List Not Empty")
+    void listNotEmpty() throws Exception {
+        facade.register("player1", "password", "p1@email.com");
+        facade.createGame("game1");
+        Collection<GameData> games = facade.listGames();
+        assertFalse(games.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Bad List Games")
+    void badListGames() throws Exception {
+        assertThrows(Exception.class, () -> facade.listGames());
+    }
+
+
 }
