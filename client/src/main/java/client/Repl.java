@@ -16,31 +16,29 @@ public class Repl {
         var result = "";
         System.out.print(client.help());
         while (!result.equals("quit")) {
-
             printPrompt();
             String line = scanner.nextLine();
-
             try {
                 result = client.eval(line);
-                if (result.strip() != "quit") {
+                if (result != "quit") {
                     System.out.print(result);
                     System.out.print("\n");
                 }
                 else {
+                    System.out.print(RESET_TEXT_COLOR);
                     System.out.println("Thanks for playing!");
-                }
-
-            } catch (Exception e) {
-                if (e.getMessage().equals("quit")) {
-                    System.out.println("Thanks for playing!");
+                    if (client.getState() == State.SIGNED_IN) {
+                        client.logout();
+                    }
                     break;
                 }
-                System.out.println(client.help());
-                System.out.println(e.getMessage() + '\n');
+
+            }
+            catch (Exception e) {
+                System.out.println(SET_TEXT_COLOR_RED + e.getMessage() + RESET_TEXT_COLOR);
             }
         }
-        System.out.println();
-        System.exit(0);
+        scanner.close();
     }
 
     private void printPrompt() {

@@ -14,5 +14,6 @@ public class Main {
         System.out.println("Started test HTTP server on " + port);
         String url = "http://localhost:" + port + "/";
         new Repl(url).run();
+        server.stop();
     }
 }

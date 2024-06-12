@@ -2,10 +2,13 @@ package client;
 
 import com.google.gson.Gson;
 import model.AuthData;
+import model.GameData;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 import static client.State.*;
+import static ui.EscapeSequences.*;
 
 public class ChessClient {
 
@@ -32,10 +35,9 @@ public class ChessClient {
     private State state;
 
     public ChessClient(String serverURL) {
-        facade = new ServerFacade(serverURL);
         this.serverURL = serverURL;
+        facade = new ServerFacade(serverURL);
         state = SIGNED_OUT;
-
     }
 
     public String eval(String input) {
@@ -55,6 +57,7 @@ public class ChessClient {
                 default -> help();
             };
         } catch (Exception ex) {
+            System.out.print(SET_TEXT_COLOR_RED);
             return ex.getMessage();
         }
     }
@@ -66,7 +69,7 @@ public class ChessClient {
             var email = params[2];
             AuthData authData = facade.register(username,password,email);
             state = SIGNED_IN;
-            return String.format("You registered as %s", authData.username());
+            return String.format("You registered as %s", authData.username()) + '\n' + help();
         }
         throw new ResponseException(400, "Expected: <USERNAME> <PASSWORD> <EMAIL>");
     }
@@ -77,7 +80,7 @@ public class ChessClient {
             var password = params[1];
             AuthData authData = facade.login(username,password);
             state = SIGNED_IN;
-            return String.format("You logged in as %s", authData.username());
+            return String.format("You logged in as %s", authData.username()) + '\n' + help();
         }
         throw new ResponseException(400, "Expected: <USERNAME> <PASSWORD>");
     }
@@ -86,28 +89,32 @@ public class ChessClient {
         isSignedIn();
         facade.logout();
         state = SIGNED_OUT;
-        return "You logged out";
+        return "You logged out" + '\n' + help();
     }
 
     public String createGame(String... params) throws ResponseException{
         isSignedIn();
         if (params.length >= 1) {
             var gameName = params[0];
-            int gameID = facade.createGame(gameName);
-            return String.format("You created a game with ID %d", gameID);
+            facade.createGame(gameName);
+            return String.format("You created a game: %s", gameName);
         }
         throw new ResponseException(400, "Expected: <NAME>");
     }
 
     public String listGames() throws ResponseException{
         isSignedIn();
-        var games = facade.listGames();
+        Collection<GameData> games = facade.listGames();
+        GameData[] getGame = games.toArray(new GameData[games.size()]);
         var result = new StringBuilder();
-        var gson = new Gson();
-        for (var game : games){
-            result.append(game.toString());
-            result.append('\n');
-//            result.append(gson.toJson(game)).append("\n");
+        String gameString;
+        for (int i = 1; i <= games.size(); i++) {
+            gameString = String.format("%d. Name: <%s>\n\tWhite Player: <%s>\n\tBlack Player: <%s>",
+                    i,getGame[i-1].gameName(),getGame[i-1].whiteUsername(),getGame[i-1].blackUsername());
+            result.append(gameString);
+            if (i != games.size()) {
+                result.append("\n");
+            }
         }
 
         return result.toString();
@@ -135,9 +142,14 @@ public class ChessClient {
 
     public String help() {
         if (state == SIGNED_OUT) {
-            return SIGNED_OUT_HELP;
+            return SET_TEXT_COLOR_BLUE + SIGNED_OUT_HELP + RESET_TEXT_COLOR;
         }
-        return LOGGED_IN_HELP;
+        return SET_TEXT_COLOR_BLUE + LOGGED_IN_HELP + RESET_TEXT_COLOR;
+    }
+
+
+    public State getState() {
+        return state;
     }
 
     private void isSignedIn() throws ResponseException {
