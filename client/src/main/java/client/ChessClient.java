@@ -51,7 +51,7 @@ public class ChessClient {
                 case "listgames" -> listGames();
                 case "joingame" -> joinGame(params);
                 case "observegame" -> observeGame(params);
-                case "quit" -> "quit";
+                case "quit" -> throw new Exception("quit");
                 default -> help();
             };
         } catch (Exception ex) {
@@ -65,6 +65,7 @@ public class ChessClient {
             var password = params[1];
             var email = params[2];
             AuthData authData = facade.register(username,password,email);
+            state = SIGNED_IN;
             return String.format("You registered as %s", authData.username());
         }
         throw new ResponseException(400, "Expected: <USERNAME> <PASSWORD> <EMAIL>");
@@ -75,6 +76,7 @@ public class ChessClient {
             var username = params[0];
             var password = params[1];
             AuthData authData = facade.login(username,password);
+            state = SIGNED_IN;
             return String.format("You logged in as %s", authData.username());
         }
         throw new ResponseException(400, "Expected: <USERNAME> <PASSWORD>");
@@ -88,6 +90,7 @@ public class ChessClient {
     }
 
     public String createGame(String... params) throws ResponseException{
+        isSignedIn();
         if (params.length >= 1) {
             var gameName = params[0];
             int gameID = facade.createGame(gameName);
@@ -136,7 +139,7 @@ public class ChessClient {
 
     private void isSignedIn() throws ResponseException {
         if (state == SIGNED_OUT) {
-            throw new ResponseException(400, "You need to sign in");
+            throw new ResponseException(400, "You need to sign in" + '\n');
         }
     }
 }

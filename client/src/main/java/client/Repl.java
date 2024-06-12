@@ -12,26 +12,34 @@ public class Repl {
     }
 
     public void run()  {
-        System.out.print(client.help());
-
         Scanner scanner = new Scanner(System.in);
         var result = "";
+        System.out.print(client.help());
         while (!result.equals("quit")) {
-            printPrompt();
+
+//            printPrompt();
             String line = scanner.nextLine();
 
             try {
                 result = client.eval(line);
-                System.out.print(result);
+                if (result != "quit") {
+                    System.out.print(result);
+                }
+                else {
+                    System.out.println("Thanks for playing!");
+                }
 
             } catch (Exception e) {
                 if (e.getMessage().equals("quit")) {
                     System.out.println("Thanks for playing!");
                     break;
                 }
+                System.out.println(client.help());
+                System.out.println(e.getMessage());
             }
         }
         System.out.println();
+        System.exit(0);
     }
 
     private void printPrompt() {
