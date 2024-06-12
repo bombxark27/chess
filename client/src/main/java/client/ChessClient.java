@@ -22,7 +22,7 @@ public class ChessClient {
             """
             createGame <NAME> - creates a new game
             listGames - list all games
-            joinGame [WHITE|BLACK] <ID> - joins a game
+            joinGame <ID> [WHITE|BLACK] - joins a game
             observe <ID> - observe a game
             logout - when you are done
             quit - playing chess
@@ -108,6 +108,17 @@ public class ChessClient {
             result.append(gson.toJson(game)).append("\n");
         }
         return result.toString();
+    }
+
+    public String joinGame(String... params) throws ResponseException{
+        isSignedIn();
+        if (params.length >= 2) {
+            var playerColor = params[1];
+            var gameID = Integer.parseInt(params[0]);
+            facade.playGame(playerColor,gameID);
+            return String.format("You joined the game with ID %d", gameID);
+        }
+        throw new ResponseException(400, "Expected: <ID> [WHITE|BLACK]");
     }
 
     private void isSignedIn() throws ResponseException {
