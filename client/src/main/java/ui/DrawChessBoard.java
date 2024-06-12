@@ -16,90 +16,116 @@ import chess.ChessPosition;
 public class DrawChessBoard {
     private static final int BOARD_SIZE_IN_SQUARES = 8;
     private static final int LINE_WIDTH_IN_CHARS = 0;
-    private static TeamColor color = TeamColor.WHITE;
-    private static ChessGame game = new ChessGame();
-    private static ChessBoard board = game.getBoard();
+    private static TeamColor color;
+    private static ChessGame game;
+    private static ChessBoard board;
 
 
-//    public DrawChessBoard(TeamColor color, ChessGame game) {
-//        this.color = color;
-//        board = game.getBoard();
-//    }
-
-    public static void main(String[] args) {
-        var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
-
-        out.print(ERASE_SCREEN);
-
-        drawHeaders(out);
-
-        drawChessBoard(out);
-
-        drawHeaders(out);
-
-        out.print(SET_BG_COLOR_BLACK);
-        out.print(SET_TEXT_COLOR_WHITE);
+    public DrawChessBoard(TeamColor color, ChessGame game) {
+        this.color = color;
+        this.game = game;
+        board = game.getBoard();
     }
 
-    private static void drawHeaders(PrintStream out) {
+    public static void displayBothBoards() {
+        boardBlack();
+        System.out.println();
+        boardWhite();
+    }
 
+    public static void boardBlack() {
+        var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
+        out.print(ERASE_SCREEN);
+        drawHeaders(out,7);
+        drawChessBoardBlack(out);
+        drawHeaders(out,7);
+        out.print(SET_BG_COLOR_BLACK);
+        out.print(SET_TEXT_COLOR_WHITE);
+        setDefault(out);
+    }
+
+    public static void boardWhite() {
+        var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
+        out.print(ERASE_SCREEN);
+        drawHeaders(out,0);
+        drawChessBoardWhite(out);
+        drawHeaders(out,0);
+        out.print(SET_BG_COLOR_BLACK);
+        out.print(SET_TEXT_COLOR_WHITE);
+        setDefault(out);
+    }
+
+    private static void drawHeaders(PrintStream out, int boardCol) {
         setBlack(out);
-
         String[] headers = {" a "," b "," c "," d "," e "," f "," g "," h "};
         drawHeader(out,EMPTY);
-        for (int boardCol = 7; boardCol >=0; --boardCol) {
-            drawHeader(out, headers[boardCol]);
-
-            if (boardCol < BOARD_SIZE_IN_SQUARES - 1) {
-                out.print(EMPTY.repeat(LINE_WIDTH_IN_CHARS));
+        if (boardCol == 7) {
+            for (int col = boardCol; col >= 0; --col) {
+                drawHeader(out, headers[col]);
+                if (col < BOARD_SIZE_IN_SQUARES - 1) {
+                    out.print(EMPTY.repeat(LINE_WIDTH_IN_CHARS));
+                }
             }
         }
-        drawHeader(out,EMPTY);
+        else if (boardCol == 0) {
+            for (int col = boardCol; col < BOARD_SIZE_IN_SQUARES; ++col) {
+                drawHeader(out, headers[col]);
+                if (col < BOARD_SIZE_IN_SQUARES - 1) {
+                    out.print(EMPTY.repeat(LINE_WIDTH_IN_CHARS));
+                }
+            }
+        }
+        drawHeader(out, EMPTY);
         out.println();
     }
 
     private static void drawHeader(PrintStream out, String headerText) {
-
         printHeaderText(out, headerText);
     }
 
     private static void printHeaderText(PrintStream out, String player) {
         out.print(SET_BG_COLOR_LIGHT_GREY);
         out.print(SET_TEXT_COLOR_BLACK);
-
         out.print(player);
-
         setDefault(out);
     }
 
-    private static void drawChessBoard(PrintStream out) {
-        drawRowOfSquares(out);
-        for (int boardRow = 0; boardRow < BOARD_SIZE_IN_SQUARES; ++boardRow) {
-
-            if (boardRow < BOARD_SIZE_IN_SQUARES - 1) {
-                setBlack(out);
-            }
+    private static void drawCheckeredBoard(PrintStream out, int squareRow, int squareCol){
+        if (squareCol%2 == 0 && (squareRow+1)%2 == 1){
+            setRed(out);
         }
+        else {
+            setBlue(out);
+        }
+        if (squareCol%2 == 1 && (squareRow+1)%2 == 0) {
+            setRed(out);
+        }
+        drawChessPiece(out,squareRow+1,squareCol+1);
     }
 
-    private static void drawRowOfSquares(PrintStream out) {
-
+    private static void drawChessBoardBlack(PrintStream out) {
         for (int squareRow = 0; squareRow < BOARD_SIZE_IN_SQUARES; ++squareRow) {
             out.print(SET_BG_COLOR_LIGHT_GREY);
             out.print(SET_TEXT_COLOR_BLACK);
             out.print(" " + (squareRow+1) + " ");
             for (int squareCol = 7; squareCol >= 0; --squareCol) {
-                if (squareCol%2 == 0 && (squareRow+1)%2 == 1){
-                    setRed(out);
-                }
-                else {
-                    setBlue(out);
-                }
-                if (squareCol%2 == 1 && (squareRow+1)%2 == 0) {
-                    setRed(out);
-                }
-                drawChessPiece(out,squareRow+1,squareCol+1);
+                drawCheckeredBoard(out,squareRow,squareCol);
+            }
+            out.print(SET_BG_COLOR_LIGHT_GREY);
+            out.print(SET_TEXT_COLOR_BLACK);
+            out.print(" " + (squareRow+1) + " ");
+            setDefault(out);
+            out.println();
+        }
+    }
 
+    private static void drawChessBoardWhite(PrintStream out) {
+        for (int squareRow = 7; squareRow >= 0; --squareRow) {
+            out.print(SET_BG_COLOR_LIGHT_GREY);
+            out.print(SET_TEXT_COLOR_BLACK);
+            out.print(" " + (squareRow+1) + " ");
+            for (int squareCol = 0; squareCol < BOARD_SIZE_IN_SQUARES; ++squareCol) {
+                drawCheckeredBoard(out,squareRow,squareCol);
             }
             out.print(SET_BG_COLOR_LIGHT_GREY);
             out.print(SET_TEXT_COLOR_BLACK);
@@ -126,7 +152,6 @@ public class DrawChessBoard {
             }
             if (color == TeamColor.WHITE) {
                 out.print(SET_TEXT_COLOR_WHITE);
-
             }
             else {
                 out.print(SET_TEXT_COLOR_BLACK);
@@ -136,8 +161,6 @@ public class DrawChessBoard {
         else {
             result = EMPTY;
         }
-        out.print(moveCursorToLocation(row+1,col+1));
-
         out.print(result);
         out.print(RESET_TEXT_COLOR);
         out.print(RESET_TEXT_BOLD_FAINT);

@@ -3,6 +3,7 @@ package client;
 import com.google.gson.Gson;
 import model.AuthData;
 import model.GameData;
+import ui.DrawChessBoard;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -126,6 +127,7 @@ public class ChessClient {
             var playerColor = params[1];
             var gameID = Integer.parseInt(params[0]);
             facade.playGame(playerColor,gameID);
+            DrawChessBoard.displayBothBoards();
             return String.format("You joined the game with ID %d", gameID);
         }
         throw new ResponseException(400, "Expected: <ID> [WHITE|BLACK]");
@@ -135,7 +137,9 @@ public class ChessClient {
         isSignedIn();
         if (params.length >= 1) {
             var gameID = Integer.parseInt(params[0]);
-            return facade.observeGame(gameID);
+            facade.observeGame(gameID);
+            DrawChessBoard.displayBothBoards();
+            return null;
         }
         throw new ResponseException(400, "Expected: <ID>");
     }
