@@ -171,10 +171,6 @@ public class DrawChessBoard {
         out.print(RESET_TEXT_BOLD_FAINT);
     }
 
-    private static void setWhite(PrintStream out) {
-        out.print(SET_BG_COLOR_WHITE);
-        out.print(SET_TEXT_COLOR_WHITE);
-    }
 
     private static void setDefault(PrintStream out) {
         out.print(RESET_TEXT_COLOR);
