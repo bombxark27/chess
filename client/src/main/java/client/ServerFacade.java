@@ -53,16 +53,19 @@ public class ServerFacade {
         return listGamesResult.games();
     }
 
-    public void playGame(String playerColor, int gameID) throws ResponseException {
+    public GameData playGame(String playerColor, int gameID) throws ResponseException {
         Collection<GameData> games = listGames();
         GameData game = (GameData) games.toArray()[gameID-1];
         JoinGameRequest joinGameRequest = new JoinGameRequest(playerColor,game.gameID());
 //        JoinGameRequest joinGameRequest = new JoinGameRequest(playerColor,gameID);
         httpCommunicator.makeRequest("PUT","/game",joinGameRequest,null,authToken);
+        return game;
     }
 
-    public String observeGame(int gameID) {
-        return String.format("Observing game: %d",gameID);
+    public GameData observeGame(int gameID) throws ResponseException {
+        Collection<GameData> games = listGames();
+        GameData game = (GameData) games.toArray()[gameID-1];
+        return game;
     }
 
 }

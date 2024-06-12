@@ -123,11 +123,14 @@ public class ChessClient {
 
     public String joinGame(String... params) throws ResponseException{
         isSignedIn();
+        GameData game;
+        DrawChessBoard visualChessBoard;
         if (params.length >= 2) {
             var playerColor = params[1];
             var gameID = Integer.parseInt(params[0]);
-            facade.playGame(playerColor,gameID);
-            DrawChessBoard.displayBothBoards();
+            game = facade.playGame(playerColor,gameID);
+            visualChessBoard = new DrawChessBoard(playerColor,game);
+            visualChessBoard.displayBothBoards();
             return String.format("You joined the game with ID %d", gameID);
         }
         throw new ResponseException(400, "Expected: <ID> [WHITE|BLACK]");
@@ -135,11 +138,15 @@ public class ChessClient {
 
     public String observeGame(String... params) throws ResponseException{
         isSignedIn();
+        GameData game;
+        DrawChessBoard visualChessBoard;
         if (params.length >= 1) {
             var gameID = Integer.parseInt(params[0]);
             facade.observeGame(gameID);
-            DrawChessBoard.displayBothBoards();
-            return null;
+            game = facade.observeGame(gameID);
+            visualChessBoard = new DrawChessBoard(null,game);
+            visualChessBoard.displayBothBoards();
+            return String.format("Observing game: %d",gameID);
         }
         throw new ResponseException(400, "Expected: <ID>");
     }

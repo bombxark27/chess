@@ -2,7 +2,6 @@ package ui;
 
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Random;
 
 import static ui.EscapeSequences.*;
 
@@ -11,23 +10,29 @@ import chess.ChessGame;
 import chess.ChessGame.*;
 import chess.ChessPiece;
 import chess.ChessPosition;
+import model.GameData;
 
 
 public class DrawChessBoard {
     private static final int BOARD_SIZE_IN_SQUARES = 8;
     private static final int LINE_WIDTH_IN_CHARS = 0;
     private static TeamColor color;
-    private static ChessGame game;
+    private static ChessGame gameData;
     private static ChessBoard board;
 
 
-    public DrawChessBoard(TeamColor color, ChessGame game) {
-        this.color = color;
-        this.game = game;
-        board = game.getBoard();
+    public DrawChessBoard(String color, GameData game) {
+        if (color != null) {
+            this.color = TeamColor.valueOf(color.toUpperCase());
+        }
+        else {
+            this.color = null;
+        }
+        this.gameData = game.game();
+        board = gameData.getBoard();
     }
 
-    public static void displayBothBoards() {
+    public void displayBothBoards() {
         boardBlack();
         System.out.println();
         boardWhite();

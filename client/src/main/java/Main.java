@@ -1,6 +1,7 @@
 import chess.*;
 
 import client.Repl;
+import client.ResponseException;
 import server.Server;
 
 public class Main {
