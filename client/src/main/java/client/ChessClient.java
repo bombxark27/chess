@@ -80,7 +80,19 @@ public class ChessClient {
         throw new ResponseException(400, "Expected: <USERNAME> <PASSWORD>");
     }
 
+    public String logout() throws ResponseException{
+        isSignedIn();
+        facade.logout();
+        state = SIGNED_OUT;
+        return "You logged out";
+    }
 
+    public String createGame(String... params) throws ResponseException{
+        if (params.length >= 1) {
+            var gameName = params[0];
+
+        }
+    }
 
     private void isSignedIn() throws ResponseException {
         if (state == SIGNED_OUT) {
