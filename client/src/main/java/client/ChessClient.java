@@ -90,8 +90,10 @@ public class ChessClient {
     public String createGame(String... params) throws ResponseException{
         if (params.length >= 1) {
             var gameName = params[0];
-
+            int gameID = facade.createGame(gameName);
+            return String.format("You created a game with ID %d", gameID);
         }
+        throw new ResponseException(400, "Expected: <NAME>");
     }
 
     private void isSignedIn() throws ResponseException {
