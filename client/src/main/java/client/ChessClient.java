@@ -65,10 +65,22 @@ public class ChessClient {
             var password = params[1];
             var email = params[2];
             AuthData authData = facade.register(username,password,email);
-            return String.format("You signed in as %s", authData.username());
+            return String.format("You registered as %s", authData.username());
         }
         throw new ResponseException(400, "Expected: <USERNAME> <PASSWORD> <EMAIL>");
     }
+
+    public String login(String... params) throws ResponseException{
+        if (params.length >= 2) {
+            var username = params[0];
+            var password = params[1];
+            AuthData authData = facade.login(username,password);
+            return String.format("You logged in as %s", authData.username());
+        }
+        throw new ResponseException(400, "Expected: <USERNAME> <PASSWORD>");
+    }
+
+
 
     private void isSignedIn() throws ResponseException {
         if (state == SIGNED_OUT) {
