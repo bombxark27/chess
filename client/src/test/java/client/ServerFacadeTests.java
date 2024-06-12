@@ -24,6 +24,10 @@ public class ServerFacadeTests {
         String url = "http://localhost:" + port + "/";
         facade = new ServerFacade(url);
         communicator = new HttpCommunicator(url);
+    }
+
+    @BeforeEach
+    public void setUp() throws ResponseException {
         communicator.makeRequest("DELETE","/db",null,null,null);
     }
 
@@ -50,13 +54,13 @@ public class ServerFacadeTests {
     @DisplayName("Bad Register")
     void badRegister() throws Exception {
         var authData = facade.register("player1", "password", "p1@email.com");
-        assertThrows(Exception.class, () ->
+        assertThrows(ResponseException.class, () ->
                 facade.register("player1", "password", "p1@email.com"));
     }
 
     @Test
     @DisplayName("Good Login")
-    void login() throws Exception {
+    void login() throws ResponseException {
         var authData = facade.register("player1", "password", "p1@email.com");
         assertTrue(authData.authToken().length() > 10);
         var loginData = facade.login("player1", "password");
@@ -65,23 +69,23 @@ public class ServerFacadeTests {
 
     @Test
     @DisplayName("Bad Login: user does not exist")
-    void badLoginUser() throws Exception {
+    void badLoginUser() throws ResponseException {
         var authData = facade.register("player1", "password", "p1@email.com");
         assertTrue(authData.authToken().length() > 10);
-        assertThrows(Exception.class, () -> facade.login("player2", "password"));
+        assertThrows(ResponseException.class, () -> facade.login("player2", "password"));
     }
 
     @Test
     @DisplayName("Bad Login: invalid password")
-    void badLoginPassword() throws Exception {
+    void badLoginPassword() throws ResponseException {
         var authData = facade.register("player1", "password", "p1@email.com");
         assertTrue(authData.authToken().length() > 10);
-        assertThrows(Exception.class, () -> facade.login("player1", "wrongpassword"));
+        assertThrows(ResponseException.class, () -> facade.login("player1", "wrongpassword"));
     }
 
     @Test
     @DisplayName("Good Logout")
-    void logout() throws Exception {
+    void logout() throws ResponseException {
         facade.register("player1", "password", "p1@email.com");
         facade.login("player1", "password");
         assertFalse(facade.noAuthorization());
@@ -91,13 +95,13 @@ public class ServerFacadeTests {
 
     @Test
     @DisplayName("Bad Logout")
-    void badLogout() throws Exception {
-        assertThrows(Exception.class, () -> facade.logout());
+    void badLogout() throws ResponseException {
+        assertThrows(ResponseException.class, () -> facade.logout());
     }
 
     @Test
     @DisplayName("Good Create Game")
-    void createGame() throws Exception {
+    void createGame() throws ResponseException {
         var authData = facade.register("player1", "password", "p1@email.com");
         assertTrue(authData.authToken().length() > 10);
         var gameID = facade.createGame("game1");
@@ -106,15 +110,15 @@ public class ServerFacadeTests {
 
     @Test
     @DisplayName("Bad Create Game")
-    void badCreateGame() throws Exception {
+    void badCreateGame() throws ResponseException {
         var authData = facade.register("player1", "password", "p1@email.com");
         facade.createGame("game1");
-        assertThrows(Exception.class, () -> facade.createGame("game1"));
+        assertThrows(ResponseException.class, () -> facade.createGame("game1"));
     }
 
     @Test
     @DisplayName("Good List Games")
-    void listGames() throws Exception {
+    void listGames() throws ResponseException {
         facade.register("player1", "password", "p1@email.com");
         Collection<GameData> games = facade.listGames();
         assertEquals(new ArrayList<GameData>(), games);
@@ -122,7 +126,7 @@ public class ServerFacadeTests {
 
     @Test
     @DisplayName("List Not Empty")
-    void listNotEmpty() throws Exception {
+    void listNotEmpty() throws ResponseException {
         facade.register("player1", "password", "p1@email.com");
         facade.createGame("game1");
         Collection<GameData> games = facade.listGames();
@@ -131,13 +135,13 @@ public class ServerFacadeTests {
 
     @Test
     @DisplayName("Bad List Games")
-    void badListGames() throws Exception {
-        assertThrows(Exception.class, () -> facade.listGames());
+    void badListGames() throws ResponseException {
+        assertThrows(ResponseException.class, () -> facade.listGames());
     }
 
     @Test
     @DisplayName("Good Play Game")
-    void playGame() throws Exception {
+    void playGame() throws ResponseException {
         facade.register("player1", "password", "p1@email.com");
         int gameID = facade.createGame("game1");
         facade.playGame("white",gameID);
@@ -146,14 +150,14 @@ public class ServerFacadeTests {
 
     @Test
     @DisplayName("Bad Play Game")
-    void badPlayGame() throws Exception {
+    void badPlayGame() throws ResponseException {
         facade.register("player1", "password", "p1@email.com");
-        assertThrows(Exception.class, () -> facade.playGame("white",0));
+        assertThrows(ResponseException.class, () -> facade.playGame("white",0));
     }
 
     @Test
     @DisplayName("Observe Game")
-    void observeGame() throws Exception {
+    void observeGame() throws ResponseException {
         facade.register("player1", "password", "p1@email.com");
         int gameID = facade.createGame("game1");
         facade.observeGame(gameID);

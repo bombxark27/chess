@@ -17,7 +17,7 @@ public class HttpCommunicator {
         this.serverUrl = url;
     }
 
-    public <T> T makeRequest(String method, String url, Object request, Class<T> responseClass, String authToken) throws Exception{
+    public <T> T makeRequest(String method, String url, Object request, Class<T> responseClass, String authToken) throws ResponseException{
         HttpURLConnection http = null;
         try {
             URL urlObj = (new URI(serverUrl + url).toURL());
@@ -41,7 +41,7 @@ public class HttpCommunicator {
             return readBody(http,responseClass);
 
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            throw new ResponseException(500,e.getMessage());
         }
 
     }
