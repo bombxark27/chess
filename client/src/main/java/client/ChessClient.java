@@ -105,8 +105,11 @@ public class ChessClient {
         var result = new StringBuilder();
         var gson = new Gson();
         for (var game : games){
-            result.append(gson.toJson(game)).append("\n");
+            result.append(game.toString());
+            result.append('\n');
+//            result.append(gson.toJson(game)).append("\n");
         }
+
         return result.toString();
     }
 
@@ -139,7 +142,7 @@ public class ChessClient {
 
     private void isSignedIn() throws ResponseException {
         if (state == SIGNED_OUT) {
-            throw new ResponseException(400, "You need to sign in" + '\n');
+            throw new ResponseException(400, "You need to sign in");
         }
     }
 }

@@ -17,13 +17,14 @@ public class Repl {
         System.out.print(client.help());
         while (!result.equals("quit")) {
 
-//            printPrompt();
+            printPrompt();
             String line = scanner.nextLine();
 
             try {
                 result = client.eval(line);
-                if (result != "quit") {
+                if (result.strip() != "quit") {
                     System.out.print(result);
+                    System.out.print("\n");
                 }
                 else {
                     System.out.println("Thanks for playing!");
@@ -35,7 +36,7 @@ public class Repl {
                     break;
                 }
                 System.out.println(client.help());
-                System.out.println(e.getMessage());
+                System.out.println(e.getMessage() + '\n');
             }
         }
         System.out.println();
@@ -43,6 +44,6 @@ public class Repl {
     }
 
     private void printPrompt() {
-        System.out.print('\n' + SET_TEXT_COLOR_BLACK + ">>>" + SET_TEXT_COLOR_GREEN);
+        System.out.print(SET_TEXT_COLOR_GREEN + ">>>" + RESET_TEXT_COLOR);
     }
 }
