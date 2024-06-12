@@ -45,21 +45,20 @@ public class ChessClient {
             var tokens = input.toLowerCase().split(" ");
             var cmd = (tokens.length > 0) ? tokens[0] : "help";
             var params = Arrays.copyOfRange(tokens, 1, tokens.length);
-//            return switch (cmd) {
-//                case "register" -> register(params);
-//                case "login" -> login(params);
-//                case "logout" -> logout();
-//                case "creategame" -> createGame(params);
-//                case "listgames" -> listGames();
-//                case "joingame" -> joinGame(params);
-//                case "observegame" -> observeGame(params);
-//                case "quit" -> "quit";
-//                default -> help();
-//            };
+            return switch (cmd) {
+                case "register" -> register(params);
+                case "login" -> login(params);
+                case "logout" -> logout();
+                case "creategame" -> createGame(params);
+                case "listgames" -> listGames();
+                case "joingame" -> joinGame(params);
+                case "observegame" -> observeGame(params);
+                case "quit" -> "quit";
+                default -> help();
+            };
         } catch (Exception ex) {
             return ex.getMessage();
         }
-        return null;
     }
 
     public String register(String... params) throws ResponseException{
@@ -119,6 +118,22 @@ public class ChessClient {
             return String.format("You joined the game with ID %d", gameID);
         }
         throw new ResponseException(400, "Expected: <ID> [WHITE|BLACK]");
+    }
+
+    public String observeGame(String... params) throws ResponseException{
+        isSignedIn();
+        if (params.length >= 1) {
+            var gameID = Integer.parseInt(params[0]);
+            return facade.observeGame(gameID);
+        }
+        throw new ResponseException(400, "Expected: <ID>");
+    }
+
+    public String help() throws ResponseException{
+        if (state == SIGNED_OUT) {
+            return SIGNED_OUT_HELP;
+        }
+        return LOGGED_IN_HELP;
     }
 
     private void isSignedIn() throws ResponseException {

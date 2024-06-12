@@ -58,8 +58,8 @@ public class ServerFacade {
         httpCommunicator.makeRequest("PUT","/game",joinGameRequest,null,authToken);
     }
 
-    public void observeGame(int gameID) {
-
+    public String observeGame(int gameID) {
+        return String.format("Observing game: %d",gameID);
     }
 
 }
