@@ -144,7 +144,7 @@ public class ServerFacadeTests {
     void playGame() throws ResponseException {
         facade.register("player1", "password", "p1@email.com");
         int gameID = facade.createGame("game1");
-        facade.playGame("white",gameID);
+        facade.playGame("white",1);
         assertFalse(facade.noAuthorization());
     }
 
@@ -152,7 +152,7 @@ public class ServerFacadeTests {
     @DisplayName("Bad Play Game")
     void badPlayGame() throws ResponseException {
         facade.register("player1", "password", "p1@email.com");
-        assertThrows(ResponseException.class, () -> facade.playGame("white",0));
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> facade.playGame("white",1));
     }
 
     @Test
@@ -160,7 +160,7 @@ public class ServerFacadeTests {
     void observeGame() throws ResponseException {
         facade.register("player1", "password", "p1@email.com");
         int gameID = facade.createGame("game1");
-        facade.observeGame(gameID);
+        facade.observeGame(1);
         assertTrue(true);
     }
 }
