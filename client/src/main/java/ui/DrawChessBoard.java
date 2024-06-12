@@ -196,16 +196,5 @@ public class DrawChessBoard {
         out.print(SET_TEXT_COLOR_BLACK);
     }
 
-    private static void setGrey(PrintStream out) {
-        out.print(SET_BG_COLOR_DARK_GREY);
-        out.print(SET_TEXT_COLOR_DARK_GREY);
-    }
 
-    private static void printPlayer(PrintStream out, String player) {
-        out.print(SET_TEXT_COLOR_BLUE);
-
-        out.print(player);
-
-        setWhite(out);
-    }
 }

@@ -13,14 +13,14 @@ import static ui.EscapeSequences.*;
 
 public class ChessClient {
 
-    private final String SIGNED_OUT_HELP =
+    private final String signedOutHelp =
             """
             register <USERNAME> <PASSWORD> <EMAIL> - to create an account
             login <USERNAME> <PASSWORD> - to play chess
             quit - playing chess
             help - with possible commands
             """;
-    private final String LOGGED_IN_HELP =
+    private final String loggedInHelp =
             """
             createGame <NAME> - creates a new game
             listGames - list all games
@@ -153,9 +153,9 @@ public class ChessClient {
 
     public String help() {
         if (state == SIGNED_OUT) {
-            return SET_TEXT_COLOR_BLUE + SIGNED_OUT_HELP + RESET_TEXT_COLOR;
+            return SET_TEXT_COLOR_BLUE + signedOutHelp + RESET_TEXT_COLOR;
         }
-        return SET_TEXT_COLOR_BLUE + LOGGED_IN_HELP + RESET_TEXT_COLOR;
+        return SET_TEXT_COLOR_BLUE + loggedInHelp + RESET_TEXT_COLOR;
     }
 
 
