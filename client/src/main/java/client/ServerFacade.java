@@ -54,7 +54,10 @@ public class ServerFacade {
     }
 
     public void playGame(String playerColor, int gameID) throws ResponseException {
-        JoinGameRequest joinGameRequest = new JoinGameRequest(playerColor,gameID);
+        Collection<GameData> games = listGames();
+        GameData game = (GameData) games.toArray()[gameID-1];
+        JoinGameRequest joinGameRequest = new JoinGameRequest(playerColor,game.gameID());
+//        JoinGameRequest joinGameRequest = new JoinGameRequest(playerColor,gameID);
         httpCommunicator.makeRequest("PUT","/game",joinGameRequest,null,authToken);
     }
 
