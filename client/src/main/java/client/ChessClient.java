@@ -2,10 +2,8 @@ package client;
 
 import com.google.gson.Gson;
 import model.AuthData;
-import model.GameData;
 
 import java.util.Arrays;
-import java.util.Collection;
 
 import static client.State.*;
 
@@ -129,7 +127,7 @@ public class ChessClient {
         throw new ResponseException(400, "Expected: <ID>");
     }
 
-    public String help() throws ResponseException{
+    public String help() {
         if (state == SIGNED_OUT) {
             return SIGNED_OUT_HELP;
         }
