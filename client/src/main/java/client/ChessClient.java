@@ -1,8 +1,11 @@
 package client;
 
+import com.google.gson.Gson;
 import model.AuthData;
+import model.GameData;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 import static client.State.*;
 
@@ -94,6 +97,17 @@ public class ChessClient {
             return String.format("You created a game with ID %d", gameID);
         }
         throw new ResponseException(400, "Expected: <NAME>");
+    }
+
+    public String listGames() throws ResponseException{
+        isSignedIn();
+        var games = facade.listGames();
+        var result = new StringBuilder();
+        var gson = new Gson();
+        for (var game : games){
+            result.append(gson.toJson(game)).append("\n");
+        }
+        return result.toString();
     }
 
     private void isSignedIn() throws ResponseException {
