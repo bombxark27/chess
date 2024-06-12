@@ -2,10 +2,7 @@ import chess.*;
 
 import client.Repl;
 import client.ResponseException;
-import server.Server;
-
 public class Main {
-    private static Server server;
 
     public static void main(String[] args) {
         var piece = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
