@@ -68,4 +68,24 @@ public class ServerFacade {
         return game;
     }
 
+    public void redrawBoard() {
+
+    }
+
+    public void leaveGame() {
+
+    }
+
+    public void makeMove() {
+
+    }
+
+    public void resign() {
+
+    }
+
+    public void highlightMoves() {
+
+    }
+
 }
